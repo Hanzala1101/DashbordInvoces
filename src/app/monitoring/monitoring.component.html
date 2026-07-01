@@ -1,1 +1,107 @@
-<p>monitoring works!</p>
+<div class="card-row">
+   <div class="card">
+      <div class="card-header">
+         <h2 class="card-title">Invoices Generated</h2>
+         <button class="btn-actions" type="button" (click)="toggleMenu('card1-menu')">
+            <span class="audible">Actions</span>
+            <svg class="icon" focusable="false" aria-hidden="true" role="presentation">
+               <use href="#icon-vertical-ellipsis"></use>
+            </svg>
+         </button>
+         <ul class="popupmenu" [class.is-hidden]="activeMenuId !== 'card1-menu'">
+            <li><a href="#" (click)="handleAction('action-one'); $event.preventDefault()">Action One</a></li>
+            <li><a href="#" (click)="handleAction('action-two'); $event.preventDefault()">Action Two</a></li>
+         </ul>
+      </div>
+      <div class="card-content">
+         <table class="data-table ">
+            <thead>
+               <tr>
+                  <th>Invoice #</th>
+                  <th>Status</th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr *ngFor="let invoice of dummyInvoices">
+                  <td>{{ invoice.number }}</td>
+                  <td><span class="badge" [ngClass]="'status-' + invoice.status.toLowerCase()">{{ invoice.status
+                        }}</span></td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+   </div>
+   <div class="card">
+      <div class="card-header">
+         <div class="widget-header-section title">
+            <h2 class="widget-title">Stats in MNS270</h2>
+         </div>
+         <div class="widget-header-section more">
+            <button class="btn-actions" type="button">
+               <span class="audible">Actions</span>
+               <svg class="icon" focusable="false" aria-hidden="true" role="presentation">
+                  <use href="#icon-vertical-ellipsis"></use>
+               </svg>
+            </button>
+            <ul class="popupmenu">
+               <li class="is-checked"><a href="#" id="single-selection">Action One</a></li>
+               <li><a href="#" id="mixed-selection">Action Two</a></li>
+            </ul>
+         </div>
+      </div>
+
+      <div class="card-content">
+         <table class="data-table">
+            <thead>
+               <tr>
+                  <th>Metric</th>
+                  <th>Value</th>
+                  <th>Trend</th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr *ngFor="let stat of dummyStats">
+                  <td>{{ stat.metric }}</td>
+                  <td><strong>{{ stat.value }}</strong></td>
+                  <td><span class="trend" [ngClass]="stat.trend.startsWith('+') ? 'trend-up' : 'trend-down'">{{
+                        stat.trend }}</span></td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+   </div>
+   <div class="card">
+      <div class="card-header">
+         <div class="widget-header-section title">
+            <h2 class="widget-title">MEC Failures</h2>
+         </div>
+         <div class="widget-header-section more">
+            <button class="btn-actions" type="button">
+               <span class="audible">Actions</span>
+               <svg class="icon" focusable="false" aria-hidden="true" role="presentation">
+                  <use href="#icon-vertical-ellipsis"></use>
+               </svg>
+            </button>
+            <ul class="popupmenu">
+               <li class="is-checked"><a href="#" id="single-selection">Action One</a></li>
+               <li><a href="#" id="mixed-selection">Action Two</a></li>
+            </ul>
+         </div>
+      </div>
+
+      <div class="card-content">
+         <table class="data-table">
+            <thead>
+               <tr>
+                  <th>Metric</th>
+               </tr>
+            </thead>
+            <tbody>
+               <tr *ngFor="let stat of dummyFailures">
+                  <td>{{ stat.metric }}</td>
+               </tr>
+            </tbody>
+         </table>
+      </div>
+   </div>
+</div>
