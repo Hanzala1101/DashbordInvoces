@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<M3OutDocument>
+   <Metadata>
+      <ZZCONO Label="Company">780</ZZCONO>
+      <ZZDIVI Label="User division">AAA</ZZDIVI>
+      <ZZDATE Label="Start date">2026-07-07</ZZDATE>
+      <ZZTIME Label="Start time">01:30:40</ZZTIME>
+      <ZZUSER Label="User">RANPRA0</ZZUSER>
+      <ZZBJNO Label="Job no">292294047882523190</ZZBJNO>
+      <ZZPRTF Label="Printer file">OIS199PF</ZZPRTF>
+      <ZZFILE Label="File name">292294047882523190OIS199PF_0</ZZFILE>
+      <ZZSIID Label="Service ID">M3_IDM_XML</ZZSIID>
+   </Metadata>
+   <DataArea>
+      <Document>
+         <ZZPRTF Label="Printer file">OIS199PF</ZZPRTF>
+         <ZZXMLT Label="Variant">01</ZZXMLT>
+         <ZZXMLD Label="XML variant des">INVOICE</ZZXMLD>
+         <ZZCSVN Label="Country version">US</ZZCSVN>
+         <Cover>
+            <Heading>
+               <ZZRLAY Label="Report layout">M3_STD_01-01</ZZRLAY>
+               <ZZXMLD>INVOICE</ZZXMLD>
+               <ZZBJNO Label="Job no">292294047882523190</ZZBJNO>
+               <From>From</From>
+               <To>To</To>
+               <SortingOrder>Sorting order</SortingOrder>
+               <PageBreak>Page break</PageBreak>
+               <PrintTotal>Print total</PrintTotal>
+               <PrintPercentage>Prt percent</PrintPercentage>
+               <ZZSPGM>OIS199</ZZSPGM>
+               <ZZROW2>Infor M3 F&amp;B</ZZROW2>
+               <ZZROW3>Infor M3 Food &amp; Beverage (780/AAA)</ZZROW3>
+            </Heading>
+            <Selection />
+         </Cover>
+         <Formatting>
+            <M3StandardFormatVersion>1</M3StandardFormatVersion>
+            <ReportLayout>M3_STD_01-01</ReportLayout>
+            <Structure>M3_STD_01-01</Structure>
+            <PaperSize></PaperSize>
+            <Localization>
+               <DocumentDivision>AAA</DocumentDivision>
+               <CountryVersion>US</CountryVersion>
+               <BaseCountry>US</BaseCountry>
+               <FromToCountry>US</FromToCountry>
+               <DocumentLanguage>GB</DocumentLanguage>
+               <Locale>en-US</Locale>
+               <DateFormat>MM-DD-YY</DateFormat>
+               <DecimalFormat>,</DecimalFormat>
+               <ThousandSeparator>.</ThousandSeparator>
+            </Localization>
+            <DocumentInformation>
+               <VATused>false</VATused>
+               <SalesTaxUsed>true</SalesTaxUsed>
+               <TotalTaxUsed>false</TotalTaxUsed>
+               <ShowDiscount>true</ShowDiscount>
+               <ShowNetPrice>false</ShowNetPrice>
+               <ShowQuantity>true</ShowQuantity>
+               <ShowSalesPrice>true</ShowSalesPrice>
+               <ShowLineAmount>true</ShowLineAmount>
+               <DebitCreditCodeUsed>false</DebitCreditCodeUsed>
+            </DocumentInformation>
+         </Formatting>
+         <Header Label="Header">
+            <CCPHNO Label="Telephone no 1">TELEPHONE 1</CCPHNO>
+            <CCCWEB Label="Company website">www.infor.com</CCCWEB>
+            <Address Label="Company address" Type="Company">
+               <VFCUNM>Infor M3 Food &amp; Beverage (780/AAA)</VFCUNM>
+               <VFADR1>Street/P.O. Box</VFADR1>
+               <VFADR2>Street/P.O. Box, County</VFADR2>
+               <VFADR3>St Paul MN ZIPCODE</VFADR3>
+               <VFADR4>United States</VFADR4>
+            </Address>
+         </Header>
+         <DocumentHeader Label="Document header">
+            <VFCOPY Label="// COPY //">false</VFCOPY>
+            <UIEXIN Label="Invoice no">2026200000033</UIEXIN>
+            <OAORNO Label="Order number">0010000124</OAORNO>
+            <OAWHLO Label="Warehouse">001</OAWHLO>
+            <OAYREF Label="Your ref 1">Contact 1</OAYREF>
+            <OAOREF Label="Our reference">Food &amp; Beverage Admin User</OAOREF>
+            <OACUNO Label="Customer">Y30001</OACUNO>
+            <UIPYNO Label="Payer">Y30000</UIPYNO>
+            <UIINRC Label="Inv recipient">Y30000</UIINRC>
+            <VFIVDT Label="Invoice date">2026-07-07</VFIVDT>
+            <UHDUDT Label="Due date">2026-08-06</UHDUDT>
+            <OAORDT Label="Order date">2014-02-13</OAORDT>
+            <OACUDT Label="Your dt">2014-02-13</OACUDT>
+            <OACUOR Label="Your order no"></OACUOR>
+            <UHYEA4 Label="Year">2026</UHYEA4>
+            <UADLIX Label="Delivery number">353</UADLIX>
+            <UADLDT Label="Delivery date">2014-02-13</UADLDT>
+            <Currency Label="Currency">
+               <VFCUCD>USD</VFCUCD>
+               <VFCU40>US Dollars</VFCU40>
+            </Currency>
+            <Salesperson Label="Salesperson">
+               <VFSMCD>ZZZZ</VFSMCD>
+               <VFSM40></VFSM40>
+            </Salesperson>
+            <DeliveryTerms Label="Delivery terms">
+               <VFTEDL>CIF</VFTEDL>
+               <VFDLT1>Cost Insurance and Freight</VFDLT1>
+               <VFDLT2>(... named port of destination)</VFDLT2>
+            </DeliveryTerms>
+            <DeliveryMethod Label="Delivery method">
+               <VFMODL>003</VFMODL>
+               <VFMOT1>Road transport</VFMOT1>
+               <VFMOT2></VFMOT2>
+            </DeliveryMethod>
+            <PaymentMethodAR Label="Payment mtd AR">
+               <VFPYCD>CH1</VFPYCD>
+               <VFPY40>Check, direct allocation, no remittance</VFPY40>
+            </PaymentMethodAR>
+            <CashDiscount Label="Cash disc term">
+               <VFTECD></VFTECD>
+               <VFCDT1></VFCDT1>
+               <VFCDT2></VFCDT2>
+            </CashDiscount>
+            <PaymentTerms Label="Payment terms">
+               <VFTEPY>N30</VFTEPY>
+               <VFPYT1>30 days net</VFPYT1>
+               <VFPYT2></VFPYT2>
+            </PaymentTerms>
+            <Responsible Label="Responsible">
+               <VFRESP>FABADM3</VFRESP>
+               <VFRE40>FABADM3 IADev</VFRE40>
+            </Responsible>
+            <PaymentInstruction Label="Payment instr">
+               <VFDIT1></VFDIT1>
+               <VFDIT2></VFDIT2>
+            </PaymentInstruction>
+            <PackagingTerms Label="Packaging terms">
+               <VFTEPA>001</VFTEPA>
+               <VFPATX>Packed in Boxes Standard size boxes</VFPATX>
+            </PackagingTerms>
+            <VATRegistrationNumber>
+               <VFYVRN Label="Your VAT reg no"></VFYVRN>
+               <VFOVRN Label="Our VAT reg no"></VFOVRN>
+            </VATRegistrationNumber>
+            <InterestRule Label="Interest rule">
+               <VFIICT></VFIICT>
+               <VFII40></VFII40>
+               <VFII15></VFII15>
+               <VFIIPC></VFIIPC>
+            </InterestRule>
+            <UHPAIN Label="Parallel inv no"></UHPAIN>
+            <VFCORG Label="Our Org no 1"></VFCORG>
+            <VFCOR2 Label="Our Org no 2"></VFCOR2>
+            <VFCOGC Label="Org no 1">ORG1Y30001</VFCOGC>
+            <VFCO2C Label="Org no 2">ORG2Y30001</VFCO2C>
+            <VFCOGP Label="Org no 1">ORG1Y30000</VFCOGP>
+            <VFCO2P Label="Org no 2">ORG2Y30000</VFCO2P>
+            <UACDNU Label="Chr del note no">0</UACDNU>
+            <UACDDE Label="Creation date"></UACDDE>
+            <APCashDiscount Label="Cash disc term">
+               <VFCDA2></VFCDA2>
+               <VFCTA1></VFCTA1>
+               <VFCTA2></VFCTA2>
+               <VFCTA3></VFCTA3>
+               <VFCAP1></VFCAP1>
+               <VFCAP2></VFCAP2>
+               <VFCAP3></VFCAP3>
+               <VFCA15></VFCA15>
+            </APCashDiscount>
+            <VFRSCD Label="Reason"></VFRSCD>
+            <VFUSID Label="User"></VFUSID>
+            <VFRGDT Label="Entry date"></VFRGDT>
+            <Address Label="Delivery Address" Type="Delivery">
+               <VFCUNM>Food Service - Restaurant 1</VFCUNM>
+               <VFADR1>Food Service-Restaurant 1 - Line 1</VFADR1>
+               <VFADR2>Food Service-Restaurant 1 - Line 2</VFADR2>
+               <VFADR3>St Paul MN ZIP</VFADR3>
+               <VFADR4>US</VFADR4>
+            </Address>
+            <Address Label="Payer address" Type="Payer">
+               <VFCUNM>Food Service - Head Office MN</VFCUNM>
+               <VFADR1>Food Service - Head - Adr line 1</VFADR1>
+               <VFADR2>Food Service - Head - Adr line 2</VFADR2>
+               <VFADR3>St Paul MN ZIP</VFADR3>
+               <VFADR4>US</VFADR4>
+            </Address>
+            <Address Label="Customer address" Type="Customer">
+               <VFCUNM>Food Service - Restaurant 1</VFCUNM>
+               <VFADR1>Food Service-Restaurant 1 - Line 1</VFADR1>
+               <VFADR2>Food Service-Restaurant 1 - Line 2</VFADR2>
+               <VFADR3>St Paul MN ZIP</VFADR3>
+               <VFADR4>US</VFADR4>
+            </Address>
+            <Address Label="Invoice address" Type="Invoice">
+               <VFCUNM>Food Service - Head Office MN</VFCUNM>
+               <VFADR1>Food Service - Head - Adr line 1</VFADR1>
+               <VFADR2>Food Service - Head - Adr line 2</VFADR2>
+               <VFADR3>St Paul MN ZIP</VFADR3>
+               <VFADR4>US</VFADR4>
+            </Address>
+            <Address Label="Taxable address" Type="Taxable">
+               <VFCUNM></VFCUNM>
+               <VFADR1></VFADR1>
+               <VFADR2></VFADR2>
+               <VFADR3></VFADR3>
+               <VFADR4></VFADR4>
+            </Address>
+         </DocumentHeader>
+         <Subdocument Label="Subdocument">
+            <TextBlock Label="Doc text" Type="DocumentText" Subtype="PreText" />
+            <TextBlock Label="Customer text" Type="CustomerText" Subtype="PreText" />
+            <Lines Label="Lines">
+               <UBPONR Label="Line"></UBPONR>
+               <UBPOSX Label="Sf"></UBPOSX>
+               <UBITNO Label="Item number"></UBITNO>
+               <VFITDS Label="Name"></VFITDS>
+               <VFORQT Label="Order qty"></VFORQT>
+               <OBALUN Label="U/M"></OBALUN>
+               <OBRSC1 Label="A r"></OBRSC1>
+               <VFRSCD Label="Rsn"></VFRSCD>
+               <VFCLQT Label="Closed quantity"></VFCLQT>
+               <VFIVQS Label="Invd qty"></VFIVQS>
+               <MMUNMS Label="U/M"></MMUNMS>
+               <VFSAPR Label="Sales price"></VFSAPR>
+               <VFLNAM Label="Amount"></VFLNAM>
+               <VFDIAM Label="Disc"></VFDIAM>
+               <MMFUDS Label="Description 2"></MMFUDS>
+               <OBVTCD Label="Vcd"></OBVTCD>
+               <UBSPUN Label="U/M"></UBSPUN>
+               <M9CSNO Label="Customs stat no"></M9CSNO>
+               <VFNEPR Label="Net price"></VFNEPR>
+               <UBSACD Label="Spqty"></UBSACD>
+               <VFDPRI Label="Net price"></VFDPRI>
+               <VFSUBT Label="Amount"></VFSUBT>
+               <VFDQTY Label="Order qty"></VFDQTY>
+               <VFLTYP Label="Ltp"></VFLTYP>
+               <VFLTYB Label="Ltp"></VFLTYB>
+               <VFCODT Label="Delivery date"></VFCODT>
+               <VFAGRD Label="Agreement date"></VFAGRD>
+               <VFTECN Label="Tax exempt cont"></VFTECN>
+               <ONVTP1 Label="VAT 1"></ONVTP1>
+               <ONVTP2 Label="VAT 2"></ONVTP2>
+               <VFORQA Label="Order qty"></VFORQA>
+               <VFLFL1 Label="Label flag 1"></VFLFL1>
+               <VFLFL2 Label="Label flag 2"></VFLFL2>
+               <VFLFL3 Label="Label flag 3"></VFLFL3>
+               <VFLFL4 Label="Label flag 4"></VFLFL4>
+               <VFLFL5 Label="Label flag 5"></VFLFL5>
+               <VFLFL6 Label="Label flag 6"></VFLFL6>
+               <VFLFN1 Label="Name"></VFLFN1>
+               <VFLFN2 Label="Name"></VFLFN2>
+               <VFLFN3 Label="Name"></VFLFN3>
+               <VFLFN4 Label="Name"></VFLFN4>
+               <VFLFN5 Label="Name"></VFLFN5>
+               <VFLFN6 Label="Name"></VFLFN6>
+               <VFCUC1 Label="Currency code 1"></VFCUC1>
+               <VFCUC2 Label="Currency code 2"></VFCUC2>
+               <VFCUC3 Label="Currency code 3"></VFCUC3>
+               <VFCUC4 Label="Currency code 4"></VFCUC4>
+               <VFCUC5 Label="Currency code 5"></VFCUC5>
+               <VFCUC6 Label="Currency code 6"></VFCUC6>
+               <VFEPR1 Label="Ext price 1"></VFEPR1>
+               <VFEPR2 Label="Ext price 2"></VFEPR2>
+               <VFEPR3 Label="Ext price 3"></VFEPR3>
+               <VFEPR4 Label="Ext price 4"></VFEPR4>
+               <VFEPR5 Label="Ext price 5"></VFEPR5>
+               <VFEPR6 Label="Ext price 6"></VFEPR6>
+               <OBPOPN Label="Alias number"></OBPOPN>
+               <VFEXCT Label="Tax exmt contr"></VFEXCT>
+               <Line>
+                  <UBPONR>1</UBPONR>
+                  <UBPOSX>0</UBPOSX>
+                  <UBITNO>Y10053</UBITNO>
+                  <VFITDS>Chicken Wings Spicy Fresh 1 kg</VFITDS>
+                  <VFORQT>10</VFORQT>
+                  <OBALUN>CAS</OBALUN>
+                  <OBRSC1></OBRSC1>
+                  <VFRSCD></VFRSCD>
+                  <VFCLQT>0</VFCLQT>
+                  <VFIVQS>10</VFIVQS>
+                  <MMUNMS>CAS</MMUNMS>
+                  <VFSAPR>32.56</VFSAPR>
+                  <VFLNAM>320.70</VFLNAM>
+                  <VFDIAM>4.90</VFDIAM>
+                  <MMFUDS>Chicken Wings Spicy Fresh 1 kg</MMFUDS>
+                  <OBVTCD>0</OBVTCD>
+                  <UBSPUN>CAS</UBSPUN>
+                  <M9CSNO>ZZZZZZZZZZZZZZZZ</M9CSNO>
+                  <VFNEPR>32.07</VFNEPR>
+                  <UBSACD>1</UBSACD>
+                  <VFDPRI></VFDPRI>
+                  <VFSUBT></VFSUBT>
+                  <VFDQTY></VFDQTY>
+                  <VFLTYP></VFLTYP>
+                  <VFLTYB></VFLTYB>
+                  <VFCODT>2014-02-15</VFCODT>
+                  <VFAGRD></VFAGRD>
+                  <VFTECN></VFTECN>
+                  <ONVTP1>0.00</ONVTP1>
+                  <ONVTP2>0.00</ONVTP2>
+                  <VFORQA>10</VFORQA>
+                  <VFLFL1></VFLFL1>
+                  <VFLFL2></VFLFL2>
+                  <VFLFL3></VFLFL3>
+                  <VFLFL4></VFLFL4>
+                  <VFLFL5></VFLFL5>
+                  <VFLFL6></VFLFL6>
+                  <VFLFN1></VFLFN1>
+                  <VFLFN2></VFLFN2>
+                  <VFLFN3></VFLFN3>
+                  <VFLFN4></VFLFN4>
+                  <VFLFN5></VFLFN5>
+                  <VFLFN6></VFLFN6>
+                  <VFCUC1></VFCUC1>
+                  <VFCUC2></VFCUC2>
+                  <VFCUC3></VFCUC3>
+                  <VFCUC4></VFCUC4>
+                  <VFCUC5></VFCUC5>
+                  <VFCUC6></VFCUC6>
+                  <VFEPR1></VFEPR1>
+                  <VFEPR2></VFEPR2>
+                  <VFEPR3></VFEPR3>
+                  <VFEPR4></VFEPR4>
+                  <VFEPR5></VFEPR5>
+                  <VFEPR6></VFEPR6>
+                  <OBPOPN>4434567000054</OBPOPN>
+                  <VFEXCT></VFEXCT>
+                  <LineTable Label="Discount" Type="Discount">
+                     <VFDIAM Label="Discount amt"></VFDIAM>
+                     <VFTX40 Label="Disc"></VFTX40>
+                     <Line>
+                        <VFDIAM>4.90</VFDIAM>
+                        <VFTX40>Prod Group Discount</VFTX40>
+                     </Line>
+                  </LineTable>
+                  <LineTable Label="Stock transactions" Type="Stock trans">
+                     <MTBANO Label="Lot number"></MTBANO>
+                     <VFTRQT Label="Trans qty"></VFTRQT>
+                     <MMUNMS Label="U/M"></MMUNMS>
+                     <Line>
+                        <MTBANO>1402130021</MTBANO>
+                        <VFTRQT>10</VFTRQT>
+                        <MMUNMS>CAS</MMUNMS>
+                     </Line>
+                  </LineTable>
+                  <TextBlock Label="Item text" Type="ItemText" Subtype="PreText" />
+                  <TextBlock Label="Item text" Type="ItemText" Subtype="PostText" />
+               </Line>
+            </Lines>
+            <TextBlock Label="Doc text" Type="DocumentText" Subtype="PostText" />
+            <TextBlock Label="Customer text" Type="CustomerText" Subtype="PostText" />
+            <SubdocumentTotal Label="Total">
+               <VFCHAM Label="Charge amount">0.00</VFCHAM>
+               <VFIVAL Label="Item value">320.70</VFIVAL>
+               <VFOTAM Label="Order tot disc">0.00</VFOTAM>
+               <VFORTO Label="Order total">320.70</VFORTO>
+               <VFODOL Label="Order Discount">0.00</VFODOL>
+               <VFODNW Label="Order Discount">0.00</VFODNW>
+            </SubdocumentTotal>
+         </Subdocument>
+         <TaxDetails Label="Tax details">
+            <VFTXDD Label="Tax type"></VFTXDD>
+            <VFTXDC Label="Description"></VFTXDC>
+            <VFTXRT Label="Rate"></VFTXRT>
+            <VFTXAM Label="Tax amount"></VFTXAM>
+            <Tax>
+               <VFTXDD>MN</VFTXDD>
+               <VFTXDC>State</VFTXDC>
+               <VFTXRT>6.500</VFTXRT>
+               <VFTXAM>20.84</VFTXAM>
+            </Tax>
+            <Tax>
+               <VFTXDD>Ramsey</VFTXDD>
+               <VFTXDC>County</VFTXDC>
+               <VFTXRT>0.250</VFTXRT>
+               <VFTXAM>0.80</VFTXAM>
+            </Tax>
+            <Tax>
+               <VFTXDD>St Paul</VFTXDD>
+               <VFTXDC>City</VFTXDC>
+               <VFTXRT>0.500</VFTXRT>
+               <VFTXAM>1.61</VFTXAM>
+            </Tax>
+         </TaxDetails>
+         <DocumentTotal Label="Document total">
+            <VFVTAM Label="VAT"></VFVTAM>
+            <VFTTAX Label="Total tax"></VFTTAX>
+            <VFSTAX Label="Sales tax">23.25</VFSTAX>
+            <VFITOT Label="Invoice total">343.95</VFITOT>
+            <VFTOPY Label="To pay">343.95</VFTOPY>
+            <VFROAM Label="Rounding-off">0.00</VFROAM>
+            <VFPIAM Label="Invoiced in adv">0.00</VFPIAM>
+            <VFPAID Label="Already paid">false</VFPAID>
+            <VFCRED Label="Credit">false</VFCRED>
+            <InvoiceAmountAsText Label="Inv amt as txt">
+               <VFSLO1></VFSLO1>
+               <VFSLO2></VFSLO2>
+               <VFSLO3></VFSLO3>
+            </InvoiceAmountAsText>
+            <VFTWTA Label="Withheld tax"></VFTWTA>
+            <VFROAT Label="VAT rounding-off"></VFROAT>
+         </DocumentTotal>
+         <Media>
+            <Mail>
+               <ToMail>jane.doe@mailserver.com</ToMail>
+               <FromMail>noreply@inforcloudsuite.com</FromMail>
+               <Subject>M3 Printout</Subject>
+               <Body>Avoid clogging up IDM.</Body>
+               <Archive>false</Archive>
+               <ReportFileType>PDF,Excel</ReportFileType>
+            </Mail>
+            <Archive>
+               <Company Name="M3_Company">780</Company>
+               <Division Name="M3_Division">AAA</Division>
+               <AccountingEntity Name="M3_AccountingEntity">780_AAA</AccountingEntity>
+               <Attribute Name="M3_InvoiceNumber">
+                  <Value>2026200000033</Value>
+               </Attribute>
+               <Attribute Name="M3_InvoiceYear">
+                  <Value>2026</Value>
+               </Attribute>
+               <Attribute Name="M3_Payer">
+                  <Value>Y30000</Value>
+               </Attribute>
+               <Attribute Name="M3_Customer">
+                  <Value>Y30001</Value>
+               </Attribute>
+               <Attribute Name="M3_Company">
+                  <Value>780</Value>
+               </Attribute>
+               <Attribute Name="M3_Division">
+                  <Value>AAA</Value>
+               </Attribute>
+               <Attribute Name="M3_AccountingEntity">
+                  <Value>780_AAA</Value>
+               </Attribute>
+               <DocumentType>M3_CustomerInvoice</DocumentType>
+               <FileName>292294047882523190OIS199PF_0</FileName>
+            </Archive>
+         </Media>
+      </Document>
+   </DataArea>
+</M3OutDocument>

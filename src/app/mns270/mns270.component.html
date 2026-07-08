@@ -1,0 +1,38 @@
+<div class="card">
+   <div class="card-header">
+      <div class="widget-header-section title">
+         <h2 class="widget-title">MNS270 Status</h2>
+      </div>
+      <div class="widget-header-section more">
+         <button class="btn-actions" type="button" (click)="toggleMenu('jobs-menu')">
+            <span class="audible">Actions</span>
+            <svg class="icon" focusable="false" aria-hidden="true" role="presentation">
+               <use href="#icon-vertical-ellipsis"></use>
+            </svg>
+         </button>
+         <ul class="popupmenu" [class.is-hidden]="activeMenuId !== 'jobs-menu'">
+            <li><a href="#" (click)="handleAction('action-one'); $event.preventDefault()">Action One</a></li>
+            <li><a href="#" (click)="handleAction('action-two'); $event.preventDefault()">Action Two</a></li>
+         </ul>
+      </div>
+   </div>
+
+   <div class="card-content">
+      <table class="data-table">
+         <thead>
+            <tr>
+               <th>Job No.</th>
+               <th>Status</th>
+               <th>Invoice Number</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr *ngFor="let job of jobs$ | async">
+               <td>{{ job.jobNo }}</td>
+               <td><strong>{{ job.status }}</strong></td>
+               <td><span class="badge" [ngClass]="'status-' + job.status.toLowerCase()">{{ job.status }}</span></td>
+            </tr>
+         </tbody>
+      </table>
+   </div>
+</div>

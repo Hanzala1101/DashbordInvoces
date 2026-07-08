@@ -1,0 +1,32 @@
+<div class="card">
+   <div class="card-header">
+      <h2 class="card-title">Invoices Generated</h2>
+      <button class="btn-actions" type="button" (click)="toggleMenu('invoices-menu')">
+         <span class="audible">Actions</span>
+         <svg class="icon" focusable="false" aria-hidden="true" role="presentation">
+            <use href="#icon-vertical-ellipsis"></use>
+         </svg>
+      </button>
+      <ul class="popupmenu" [class.is-hidden]="activeMenuId !== 'invoices-menu'">
+         <li><a href="#" (click)="handleAction('action-one'); $event.preventDefault()">Action One</a></li>
+         <li><a href="#" (click)="handleAction('action-two'); $event.preventDefault()">Action Two</a></li>
+      </ul>
+   </div>
+   <div class="card-content">
+      <table class="data-table">
+         <thead>
+            <tr>
+               <th>Invoice #</th>
+               <th>Status</th>
+            </tr>
+         </thead>
+         <tbody>
+            <tr *ngFor="let invoice of invoices$ | async">
+               <td>{{ invoice.number }}</td>
+               <td><span class="badge" [ngClass]="'status-' + invoice.status.toLowerCase()">{{ invoice.status }}</span>
+               </td>
+            </tr>
+         </tbody>
+      </table>
+   </div>
+</div>

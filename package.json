@@ -11,7 +11,7 @@
    "private": true,
    "dependencies": {
       "@angular/animations": "^18.2.0",
-      "@angular/common": "^18.2.0",
+      "@angular/common": "^18.2.14",
       "@angular/compiler": "^18.2.0",
       "@angular/core": "^18.2.0",
       "@angular/forms": "^18.2.0",
@@ -20,6 +20,7 @@
       "@angular/router": "^18.2.0",
       "@infor-up/m3-odin": "8.0.0",
       "@infor-up/m3-odin-angular": "8.0.0",
+      "dom-parser": "^1.1.5",
       "ids-enterprise-ng": "18.2.4",
       "ids-enterprise-wc": "^1.16.20",
       "rxjs": "~7.8.0",
