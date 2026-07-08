@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { distinctUntilChanged, map } from 'rxjs/operators';
-import { Invoice } from './app-store.state';
+import { distinctUntilChanged, map, finalize } from 'rxjs/operators';
+import { Invoice, Stat } from './app-store.state';
+import { DataService } from '../services/data.service';
 
 export interface InvoiceState {
    invoices: Invoice[];
    selectedInvoiceId: number | null;
+   isBusy: boolean;
 }
 
 export const initialInvoiceState: InvoiceState = {
@@ -16,7 +18,8 @@ export const initialInvoiceState: InvoiceState = {
       { id: 4, number: 'INV-004', status: 'Paid' },
       { id: 5, number: 'INV-005', status: 'Draft' }
    ],
-   selectedInvoiceId: null
+   selectedInvoiceId: null,
+   isBusy: false
 };
 
 @Injectable({
@@ -28,8 +31,9 @@ export class InvoiceStore {
 
    readonly invoices$ = this.select(state => state.invoices);
    readonly selectedInvoiceId$ = this.select(state => state.selectedInvoiceId);
+   readonly isBusy$ = this.select(state => state.isBusy);
 
-   constructor() { }
+   constructor(private dataService: DataService) { }
 
    private select<T>(project: (state: InvoiceState) => T): Observable<T> {
       return this.state$.pipe(map(project), distinctUntilChanged());
@@ -46,6 +50,10 @@ export class InvoiceStore {
       this.updateState({ invoices });
    }
 
+   setBusy(isBusy: boolean): void {
+      this.updateState({ isBusy });
+   }
+
    selectInvoice(id: number): void {
       this.updateState({ selectedInvoiceId: id });
    }
@@ -56,4 +64,29 @@ export class InvoiceStore {
       );
       this.setInvoices(invoices);
    }
+
+   loadInvoiceData(CONO: string, date: string): void {
+      this.setBusy(true);
+      this.dataService.fetchInvoiceData(CONO, date).subscribe(
+         (data: any) => {
+            let invoices: Invoice[] = [];
+            if (data && Array.isArray(data.invoices)) {
+               invoices = data.invoices as Invoice[];
+            } else if (data && Array.isArray(data.items)) {
+               invoices = data.items.map((record: any, idx: number) => ({
+                  id: idx + 1,
+                  number: record.REPL || record.number || '',
+                  status: record.status || 'Pending'
+               }));
+            }
+            this.setInvoices(invoices);
+            this.setBusy(false);
+         },
+         (err) => {
+            console.error('Failed to load invoice data:', err);
+            this.setBusy(false);
+         }
+      );
+   }
+
 }

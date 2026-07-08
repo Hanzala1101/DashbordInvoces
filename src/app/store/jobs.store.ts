@@ -49,9 +49,9 @@ export class JobsStore {
     * Load job data from CMS100MI/LstJob API
     * @returns Observable to track loading state
     */
-   loadJobsData(): Observable<any[]> {
+   loadJobsData(date: string | null): Observable<any[]> {
       this.setBusy(true);
-      return this.dataService.fetchJobsData().pipe(
+      return this.dataService.fetchJobsData(date).pipe(
          map(jobs => {
             this.setJobs(jobs);
             return jobs;

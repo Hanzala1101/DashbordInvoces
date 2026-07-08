@@ -1,19 +1,35 @@
-import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Observable, Subscription } from 'rxjs';
 import { InvoiceStore } from '../store/invoice.store';
 import { Invoice } from '../store/app-store.state';
+import { DataService } from '../services/data.service';
+import { AppStoreService } from '../store/app-store.service';
 
 @Component({
    selector: 'app-invoice-genrated',
    templateUrl: './invoice-genrated.component.html',
-   styleUrl: './invoice-genrated.component.css'
+   styleUrls: ['./invoice-genrated.component.css']
 })
 export class InvoiceGenratedComponent {
    activeMenuId: string | null = null;
    invoices$: Observable<Invoice[]>;
 
-   constructor(private invoiceStore: InvoiceStore) {
+   private subscriptions = new Subscription();
+
+   constructor(
+      private invoiceStore: InvoiceStore,
+      private dataService: DataService,
+      private appStore: AppStoreService
+   ) {
       this.invoices$ = this.invoiceStore.invoices$;
+   }
+
+   ngOnInit(): void {
+      // const curDate = this.appStore.getSelectedDate();
+   }
+
+   ngOnDestroy(): void {
+      this.subscriptions.unsubscribe();
    }
 
    toggleMenu(menuId: string): void {
@@ -24,4 +40,7 @@ export class InvoiceGenratedComponent {
       console.log('Invoices card action selected:', action);
       this.activeMenuId = null;
    }
+
+
+
 }

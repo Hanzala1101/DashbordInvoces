@@ -4,11 +4,6 @@ import { map, catchError, tap, switchMap } from 'rxjs/operators';
 import { MIService } from '@infor-up/m3-odin-angular';
 import { Invoice, Stat, Failure, Job, File } from '../store/app-store.state';
 
-export interface ExportMIResponse {
-   invoices?: Invoice[];
-   stats?: Stat[];
-   failures?: Failure[];
-}
 
 @Injectable({
    providedIn: 'root'
@@ -21,7 +16,7 @@ export class DataService {
     * Call EXPORTMI API to fetch invoice data
     * @returns Observable with invoice, stats, and failure data
     */
-   fetchInvoiceData(CONO: string, date: string): Observable<ExportMIResponse> {
+   fetchInvoiceData(CONO: string, date: string): Observable<any> {
       // Date expected as yyyy-MM-dd from datepicker; convert to YYYYMMDD for query
       const qDate = (date || '').replace(/-/g, '');
       const conoVal = CONO || '';
@@ -34,9 +29,7 @@ export class DataService {
             QERY: qery
          }
 
-
       }).pipe(
-         map(response => this.transformMIResponse(response)),
          tap(data => console.log('Fetched invoice data:', data)),
          catchError(error => {
             console.error('Error fetching invoice data from EXPORTMI:', error);
@@ -45,28 +38,6 @@ export class DataService {
       );
    }
 
-   /**
-    * Transform the M3 response to our app state structure
-    */
-   private transformMIResponse(response: any): ExportMIResponse {
-      const result: ExportMIResponse = {
-         invoices: []
-      };
-      console.log('Transforming MI response:', response);
-      if (response && response.items && Array.isArray(response.items)) {
-         response.items.forEach((record: any) => {
-
-            result.invoices?.push({
-               id: parseInt(record.id || 0),
-               number: record.REPL || '',
-               status: record.status || 'Pending'
-            });
-
-         });
-      }
-
-      return result;
-   }
 
    /**
             * Fetch an XML file from a URL and extract the ZZCONO value
@@ -81,9 +52,9 @@ export class DataService {
          }),
          map((xmlText: string) => {
             try {
-                const parser = new DOMParser();
-            const xmlDoc = parser.parseFromString(xmlText, 'application/xml');
-            const node = xmlDoc.querySelector('M3OutDocument > DataArea > Document > DocumentHeader > UIEXIN');
+               const parser = new DOMParser();
+               const xmlDoc = parser.parseFromString(xmlText, 'application/xml');
+               const node = xmlDoc.querySelector('M3OutDocument > DataArea > Document > DocumentHeader > UIEXIN');
                return (node && node.textContent) ? node.textContent.trim() : '';
             } catch (err) {
                return '';
@@ -101,10 +72,10 @@ export class DataService {
     * Fetch job data from CMS100MI/LstJob
     * @returns Observable with Job array
     */
-   fetchJobsData(): Observable<Job[]> {
+   fetchJobsData(date: string | null): Observable<Job[]> {
       return this.callMIAPI('CMS100MI', 'LstJob', {
          C4PRTF: "OIS199PF",
-         C4RGDT: "20260707"
+         C4RGDT: date ? date : '20260707'
       }).pipe(
          map((response: any) => {
             const jobs: Job[] = [];
@@ -113,12 +84,14 @@ export class DataService {
                   jobs.push({
                      id: index + 1,
                      jobNo: record.C4BJNO || '',
-                     status: record.C4SSTA || 'Unknown'
+                     status: record.C4SSTA || 'Unknown',
+                     invoiceNo: record.C4INNO || ''
                   });
                });
             }
             return jobs;
          }),
+
          tap(data => console.log('Fetched jobs data:', data)),
          catchError(error => {
             console.error('Error fetching jobs data from CMS100MI:', error);
@@ -132,7 +105,7 @@ export class DataService {
     * Fetch job data from CMS100MI/LstJob
     * @returns Observable with Job array
     */
-   getJobNumber(JBNO: String): Observable<File[]> {
+   listFIles(JBNO: String): Observable<File[]> {
       return this.callMIAPI('CMS100MI', 'LstFiles', {
          CXBJNO: JBNO,
          CXPRTF: "OIS199PF"

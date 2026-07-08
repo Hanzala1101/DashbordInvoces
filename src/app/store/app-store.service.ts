@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { distinctUntilChanged, map, finalize, tap } from 'rxjs/operators';
 import { AppState, initialAppState, Failure, Invoice, Stat } from './app-store.state';
 import type { IUserContext } from '@infor-up/m3-odin';
-import { DataService } from '../services/data.service';
+import { InvoiceStore } from './invoice.store';
+import { FailuresStore } from './failures.store';
+import { JobsStore } from './jobs.store';
 
 @Injectable({
    providedIn: 'root'
@@ -12,18 +14,19 @@ export class AppStoreService {
    private readonly stateSubject = new BehaviorSubject<AppState>(initialAppState);
    readonly state$ = this.stateSubject.asObservable();
 
-   readonly invoices$ = this.select(state => state.invoices);
-   readonly stats$ = this.select(state => state.stats);
-   readonly failures$ = this.select(state => state.failures);
-   readonly jobs$ = this.select(state => state.jobs);
    readonly file$ = this.select(state => state.file);
-   readonly selectedInvoiceId$ = this.select(state => state.selectedInvoiceId);
    readonly userContext$ = this.select(state => state.userContext);
    readonly isBusy$ = this.select(state => state.isBusy);
    readonly selectedDate$ = this.select(state => state.selectedDate);
    readonly conoFromXml$ = this.select(state => state.conoFromXml);
+   private readonly selectedDateSubject = new Subject<string | null>();
+   readonly selectedDateChange$ = this.selectedDateSubject.asObservable();
 
-   constructor(private dataService: DataService) { }
+   constructor(
+      private invoiceStore: InvoiceStore,
+      private failuresStore: FailuresStore,
+      private jobsStore: JobsStore
+   ) { }
 
    private select<T>(project: (state: AppState) => T): Observable<T> {
       return this.state$.pipe(map(project), distinctUntilChanged());
@@ -42,23 +45,30 @@ export class AppStoreService {
 
    setSelectedDate(date: string | null): void {
       this.updateState({ selectedDate: date });
+      this.selectedDateSubject.next(date);
+   }
+
+   /**
+ * Synchronously return the current selected date from the store (YYYYMMDD or null)
+ */
+   getSelectedDate(): string | null {
+      return this.stateSubject.value.selectedDate;
+   }
+
+   getUserContextSync(): IUserContext | null {
+      return this.stateSubject.value.userContext;
    }
 
    setConoFromXml(cono: string | null): void {
       this.updateState({ conoFromXml: cono });
    }
 
-   // loadConoFromXml(url: string) {
-   //    return this.dataService.fetchConoFromXml(url).pipe(
-   //       tap(cono => this.setConoFromXml(cono))
-   //    );
-   // }
-
    setBusy(isBusy: boolean): void {
       this.updateState({ isBusy });
    }
 
    setInvoices(invoices: Invoice[]): void {
+      this.invoiceStore.setInvoices(invoices);
       this.updateState({ invoices });
    }
 
@@ -67,10 +77,12 @@ export class AppStoreService {
    }
 
    setFailures(failures: Failure[]): void {
+      this.failuresStore.setFailures(failures);
       this.updateState({ failures });
    }
 
    setJobs(jobs: any[]): void {
+      this.jobsStore.setJobs(jobs);
       this.updateState({ jobs });
    }
 
@@ -79,10 +91,12 @@ export class AppStoreService {
    }
 
    selectInvoice(id: number): void {
+      this.invoiceStore.selectInvoice(id);
       this.updateState({ selectedInvoiceId: id });
    }
 
    updateInvoiceStatus(id: number, status: string): void {
+      this.invoiceStore.updateInvoiceStatus(id, status);
       const invoices = this.stateSubject.value.invoices.map(invoice =>
          invoice.id === id ? { ...invoice, status } : invoice
       );
@@ -90,29 +104,12 @@ export class AppStoreService {
    }
 
    /**
-    * Load invoice data from EXPORTMI API
-    * @returns Observable to track loading state
-    */
-   loadInvoiceData(CONO: string, date: string): Observable<any> {
-      this.setBusy(true);
-      return this.dataService.fetchInvoiceData(CONO, date).pipe(
-         map(data => {
-            if (data.invoices) this.setInvoices(data.invoices);
-            if (data.stats) this.setStats(data.stats);
-            if (data.failures) this.setFailures(data.failures);
-            return data;
-         }),
-         finalize(() => this.setBusy(false))
-      );
-   }
-
-   /**
     * Load job data from CMS100MI/LstJob API
     * @returns Observable to track loading state
     */
-   loadJobsData(): Observable<any[]> {
+   loadJobsData(date: string): Observable<any[]> {
       this.setBusy(true);
-      return this.dataService.fetchJobsData().pipe(
+      return this.jobsStore.loadJobsData(date).pipe(
          map(jobs => {
             this.setJobs(jobs);
             return jobs;

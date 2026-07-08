@@ -22,6 +22,7 @@ export interface Job {
    id: number;
    jobNo: string;
    status: string;
+   invoiceNo: string;
 }
 
 export interface File {
@@ -42,6 +43,7 @@ export interface AppState {
    selectedDate: string | null;
    // CONO extracted from XML (stored as string, e.g. '780')
    conoFromXml: string | null;
+   date: string | null;
 }
 
 export const initialAppState: AppState = {
@@ -73,5 +75,6 @@ export const initialAppState: AppState = {
       { id: 5, metric: 'Revenue' }
    ],
    jobs: [],
-   file: []
+   file: [],
+   date: "",
 };
