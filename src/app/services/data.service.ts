@@ -50,20 +50,34 @@ export class DataService {
             }
             return res.text();
          }),
-         map((xmlText: string) => {
+         map((responseText: string) => {
             try {
                const parser = new DOMParser();
-               const xmlDoc = parser.parseFromString(xmlText, 'application/xml');
-               const node = xmlDoc.querySelector('M3OutDocument > DataArea > Document > DocumentHeader > UIEXIN');
-               return (node && node.textContent) ? node.textContent.trim() : '';
+               // First parse as HTML, since the response may be rendered HTML rather than raw XML
+               const htmlDoc = parser.parseFromString(responseText, 'text/html');
+               let node = htmlDoc.querySelector('M3OutDocument > DataArea > Document > DocumentHeader > UIEXIN')
+                  || htmlDoc.querySelector('UIEXIN');
+
+               if (!node) {
+                  const xmlDoc = parser.parseFromString(responseText, 'application/xml');
+                  node = xmlDoc.querySelector('M3OutDocument > DataArea > Document > DocumentHeader > UIEXIN')
+                     || xmlDoc.querySelector('UIEXIN');
+               }
+
+               let value = node?.textContent?.trim() || '';
+               if (!value) {
+                  const match = responseText.match(/<UIEXIN[^>]*>([^<]+)<\/UIEXIN>/i);
+                  value = match?.[1]?.trim() || '';
+               }
+               return value;
             } catch (err) {
                return '';
             }
          }),
-         tap((val: string) => console.log('Extracted ZZCONO from XML:', val)),
+         tap((val: string) => console.log('Extracted ZZCONO from XML/HTML:', val)),
          catchError(error => {
-            console.error('Error fetching/parsing XML:', error);
-            return throwError(() => new Error(error.message || 'XML fetch/parse error'));
+            console.error('Error fetching/parsing XML/HTML:', error);
+            return throwError(() => new Error(error.message || 'XML/HTML fetch/parse error'));
          })
       );
    }
@@ -116,8 +130,8 @@ export class DataService {
                response.items.forEach((record: any, index: number) => {
                   file.push({
                      id: index + 1,
-                     jobNo: record.CXFNAM || '',
-                     filename: record.CXSSTA || 'Unknown'
+                     jobNo: record.CXBJNO || '',
+                     filename: record.CXFNAM || 'Unknown'
                   });
                });
             }

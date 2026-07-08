@@ -21,38 +21,47 @@ export class MNS270Component implements OnInit, OnDestroy {
 
    ngOnInit(): void {
       const date = this.appStore.getSelectedDate(); // initial load
-      this.jobsStore.loadJobsData(date).subscribe(
-         () => console.log('Jobs data loaded successfully'),
-         (error) => console.error('Failed to load jobs data:', error)
-      );
-      const url = "https://m3-cm3xprduse1b.m32.m3.us1.mprd.inforcloudsuite.com/foundation/mvxout?file=";
-      this.jobsStore.jobs$.subscribe(
-         (jobs) => jobs.map((job) =>
-            this.dataService.listFIles(job.jobNo).subscribe(
-               (files) => {
-                  files.forEach(file => {
-                     this.dataService.fetchConoFromXml(url + file.filename + ".xml").subscribe(
-                        (invo) => {
-                           this.jobsStore.setJobs(jobs.map(j => j.jobNo === job.jobNo ? { ...j, invoiceNo: invo } : j));
-                           console.log(`Job ${job.jobNo} has CONO: ${invo}`);
-                        },
-                        (error) => console.error('Error fetching CONO for file:', file.filename, error)
-                     );
-                  })
-               },
-               (error) => console.error('Error fetching files for job:', job.jobNo, error)
-            )
-         ),
-         (error) => console.error('Error in jobs observable:', error)
-      );
+      this.loadJobs(date);
+
       this.subscriptions.add(
          this.appStore.selectedDateChange$.subscribe((newDate) => {
-            this.jobsStore.loadJobsData(newDate).subscribe(
-               () => console.log('Jobs reloaded on date change'),
-               (error) => console.error('Failed to reload jobs data:', error)
-            );
+            this.loadJobs(newDate);
          })
       );
+   }
+
+   private loadJobs(date: string | null): void {
+      this.jobsStore.loadJobsData(date).subscribe(
+         (jobs) => {
+            console.log('Jobs data loaded successfully');
+            this.loadJobInvoiceNumbers(jobs);
+         },
+         (error) => console.error('Failed to load jobs data:', error)
+      );
+   }
+
+   private loadJobInvoiceNumbers(jobs: Job[]): void {
+      const url = 'https://m3-cm3xprduse1b.m32.m3.us1.mprd.inforcloudsuite.com/foundation/mvxout?file=';
+
+      jobs.forEach((job) => {
+         this.dataService.listFIles(job.jobNo).subscribe(
+            (files) => {
+               files.forEach((file) => {
+                  this.dataService.fetchConoFromXml(url + file.filename).subscribe(
+                     (invo) => {
+                        const updatedJobs = jobs.map((j) =>
+                           j.jobNo === job.jobNo ? { ...j, invoiceNo: invo } : j
+                        );
+                        this.jobsStore.setJobs(updatedJobs);
+                        console.log(`Job ${job.jobNo} has CONO: ${invo}`);
+                     },
+                     (error) => console.error('Error fetching CONO for file:', file.filename, error)
+                  );
+               });
+            },
+            (error) => console.error('Error fetching files for job:', job.jobNo, error)
+         );
+      });
    }
 
    ngOnDestroy(): void {
