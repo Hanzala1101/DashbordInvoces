@@ -1,22 +1,22 @@
 import { Injectable } from '@angular/core';
-import { InvoiceGeneratedFileds, MNS270Fileds } from '../shared/models';
+import { MECFailureFileds } from '../shared/models';
 import { Store } from './store';
 
-class InvoiceState {
-  data: InvoiceGeneratedFileds[] = [];
-  selectedInvoiceId: number | null = null;
+class FailuresState {
+  data: MECFailureFileds[] = [];
   isBusy: boolean = false;
 }
 
 @Injectable({
   providedIn: 'root',
 })
-export class InvoiceStore extends Store<InvoiceState> {
+export class FailuresStore extends Store<FailuresState> {
   constructor() {
-    super(new InvoiceState());
+    super(new FailuresState());
   }
+
   reset(): void {
-    this.setState({ ...this.state, ...new InvoiceState() });
+    this.setState({ ...this.state, ...new FailuresState() });
   }
 
   clearRowSelection(): void {

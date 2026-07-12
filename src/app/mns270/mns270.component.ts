@@ -1,79 +1,83 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
-import { Job } from '../store/app-store.state';
-import { JobsStore } from '../store/jobs.store';
-import { AppStoreService } from '../store/app-store.service';
+import {
+  Component,
+  AfterViewInit,
+  ViewChild,
+  ChangeDetectionStrategy,
+} from '@angular/core';
+import { finalize, forkJoin, mergeMap, Observable, Subscription } from 'rxjs';
+import { JobsStore } from '../store/mns270.store';
 import { DataService } from '../services/data.service';
+import { SohoDataGridComponent } from 'ids-enterprise-ng';
+import { gridOptions } from '../shared/gridOptions';
+import { EventService } from '../services/event.service';
+import { Events } from '../shared/constants';
+import { GlobalStore } from '../store/global-store';
 
 @Component({
-   selector: 'app-mns270',
-   templateUrl: './mns270.component.html',
-   styleUrls: ['./mns270.component.css']
+  selector: 'app-mns270',
+  templateUrl: './mns270.component.html',
+  styleUrls: ['./mns270.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MNS270Component implements OnInit, OnDestroy {
-   activeMenuId: string | null = null;
-   jobs$: Observable<Job[]>;
-   private subscriptions = new Subscription();
+export class MNS270Component implements AfterViewInit {
+  state$!: Observable<any>;
 
-   constructor(private jobsStore: JobsStore, private appStore: AppStoreService, private dataService: DataService) {
-      this.jobs$ = this.jobsStore.jobs$;
-   }
+  @ViewChild(SohoDataGridComponent) dataGrid!: SohoDataGridComponent;
 
-   ngOnInit(): void {
-      const date = this.appStore.getSelectedDate(); // initial load
-      this.loadJobs(date);
+  gridOptions = new gridOptions().mnS270GridOptions;
+  constructor(
+    private store: JobsStore,
+    private eventService: EventService,
+    private dataService: DataService,
+    private globalStore: GlobalStore,
+  ) {
+    this.state$ = this.store.state$.pipe();
+  }
 
-      this.subscriptions.add(
-         this.appStore.selectedDateChange$.subscribe((newDate) => {
-            this.loadJobs(newDate);
-         })
-      );
-   }
+  ngAfterViewInit(): void {
+    /**
+     * Setup event subscription
+     */
+    this.setupEvents();
+  }
 
-   private loadJobs(date: string | null): void {
-      this.jobsStore.loadJobsData(date).subscribe(
-         (jobs) => {
-            console.log('Jobs data loaded successfully');
-            this.loadJobInvoiceNumbers(jobs);
-         },
-         (error) => console.error('Failed to load jobs data:', error)
-      );
-   }
+  /**
+   * Subscribe to events
+   */
+  setupEvents(): void {
+    // Reset fields when a record in selected in MMS025
+    this.eventService.on(Events.dateSelected, () => {
+      this.store.reset();
+    });
 
-   private loadJobInvoiceNumbers(jobs: Job[]): void {
-      const url = 'https://m3-cm3xprduse1b.m32.m3.us1.mprd.inforcloudsuite.com/foundation/mvxout?file=';
+    // Populate fields when a warehouse is selected
+    this.eventService.on(Events.dateSelected, () => {
+      this.populateList();
+    });
+  }
 
-      jobs.forEach((job) => {
-         this.dataService.listFIles(job.jobNo).subscribe(
-            (files) => {
-               files.forEach((file) => {
-                  this.dataService.fetchConoFromXml(url + file.filename).subscribe(
-                     (invo) => {
-                        const updatedJobs = jobs.map((j) =>
-                           j.jobNo === job.jobNo ? { ...j, invoiceNo: invo } : j
-                        );
-                        this.jobsStore.setJobs(updatedJobs);
-                        console.log(`Job ${job.jobNo} has CONO: ${invo}`);
-                     },
-                     (error) => console.error('Error fetching CONO for file:', file.filename, error)
-                  );
-               });
-            },
-            (error) => console.error('Error fetching files for job:', job.jobNo, error)
-         );
+  populateList(): void {
+    const selectedDate = this.globalStore.date;
+    this.store.setBusy(true);
+    this.dataService
+      .fetchJobs(selectedDate)
+      .pipe(finalize(() => this.store.setBusy(false)))
+      .subscribe((jobs) => {
+        this.getInvoiceandJob(jobs);
       });
-   }
+  }
 
-   ngOnDestroy(): void {
-      this.subscriptions.unsubscribe();
-   }
-
-   toggleMenu(menuId: string): void {
-      this.activeMenuId = this.activeMenuId === menuId ? null : menuId;
-   }
-
-   handleAction(action: string): void {
-      console.log('Jobs status card action selected:', action);
-      this.activeMenuId = null;
-   }
+  getInvoiceandJob(items: any): void {
+    items.items.forEach((item: any) => {
+      const jobNo = item.C4BJNO;
+      this.dataService
+        .fetchMNS270(jobNo)
+        .pipe(finalize(() => this.store.setBusy(false)))
+        .subscribe({
+          next: (data: any) => {
+            this.store.setItems(data.items);
+          },
+        });
+    });
+  }
 }

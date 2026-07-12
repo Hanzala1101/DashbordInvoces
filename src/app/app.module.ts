@@ -10,39 +10,41 @@ import { MonitoringComponent } from './monitoring/monitoring.component';
 import { MNS270Component } from './mns270/mns270.component';
 import { MecFaliuresComponent } from './mec-faliures/mec-faliures.component';
 import { InvoiceGenratedComponent } from './invoice-genrated/invoice-genrated.component';
+import { AppInitializerModule } from './app-initializer.module';
 
 @NgModule({
-   declarations: [
-      AppComponent,
-      MonitoringComponent,
-      MNS270Component,
-      MecFaliuresComponent,
-      InvoiceGenratedComponent
-   ],
-   imports: [
-      BrowserModule,
-      FormsModule,
-      HttpClientModule,
-      SohoComponentsModule,
-      M3OdinModule
-   ],
-   providers: [
-      {
-         provide: LOCALE_ID,
-         useValue: 'en-US',
-      },
-      {
-         provide: APP_INITIALIZER,
-         multi: true,
-         useFactory: (locale: string) => () => {
-            Soho.Locale.culturesPath = 'assets/ids-enterprise/js/cultures/';
-            return Soho.Locale.set(locale).catch(err => {
-               Log.error('Failed to set IDS locale', err);
-            });
-         },
-         deps: [LOCALE_ID],
-      }
-   ],
-   bootstrap: [AppComponent]
+  declarations: [
+    AppComponent,
+    MonitoringComponent,
+    MNS270Component,
+    MecFaliuresComponent,
+    InvoiceGenratedComponent,
+  ],
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpClientModule,
+    SohoComponentsModule,
+    M3OdinModule,
+    AppInitializerModule,
+  ],
+  // providers: [
+  //    {
+  //       provide: LOCALE_ID,
+  //       useValue: 'en-US',
+  //    },
+  //    {
+  //       provide: APP_INITIALIZER,
+  //       multi: true,
+  //       useFactory: (locale: string) => () => {
+  //          Soho.Locale.culturesPath = 'assets/ids-enterprise/js/cultures/';
+  //          return Soho.Locale.set(locale).catch(err => {
+  //             Log.error('Failed to set IDS locale', err);
+  //          });
+  //       },
+  //       deps: [LOCALE_ID],
+  //    }
+  // ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

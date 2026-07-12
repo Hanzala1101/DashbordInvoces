@@ -1,34 +1,16 @@
 <div class="card">
-   <div class="card-header">
-      <div class="widget-header-section title">
-         <h2 class="widget-title">MEC Failures</h2>
-      </div>
-      <div class="widget-header-section more">
-         <button class="btn-actions" type="button" (click)="toggleMenu('failures-menu')">
-            <span class="audible">Actions</span>
-            <svg class="icon" focusable="false" aria-hidden="true" role="presentation">
-               <use href="#icon-vertical-ellipsis"></use>
-            </svg>
-         </button>
-         <ul class="popupmenu" [class.is-hidden]="activeMenuId !== 'failures-menu'">
-            <li><a href="#" (click)="handleAction('action-one'); $event.preventDefault()">Action One</a></li>
-            <li><a href="#" (click)="handleAction('action-two'); $event.preventDefault()">Action Two</a></li>
-         </ul>
-      </div>
-   </div>
-
-   <div class="card-content">
-      <table class="data-table">
-         <thead>
-            <tr>
-               <th>Metric</th>
-            </tr>
-         </thead>
-         <tbody>
-            <tr *ngFor="let stat of failures$ | async">
-               <td>{{ stat.metric }}</td>
-            </tr>
-         </tbody>
-      </table>
-   </div>
+  <div class="card-header">
+    <h2 class="card-title">Mec Faliures</h2>
+  </div>
+  <div class="card-content">
+    <div
+      *ngIf="state$ | async as state"
+      soho-busyindicator
+      [activated]="state.isBusy"
+      [blockUI]="true"
+      [displayDelay]="0"
+    >
+      <div soho-datagrid [gridOptions]="gridOptions" [data]="state.data"></div>
+    </div>
+  </div>
 </div>

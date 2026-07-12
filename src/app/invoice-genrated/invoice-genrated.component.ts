@@ -1,46 +1,97 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, Subscription } from 'rxjs';
+import {
+  Component,
+  ChangeDetectionStrategy,
+  AfterViewInit,
+  ViewChild,
+} from '@angular/core';
+import { finalize, Observable, Subscription } from 'rxjs';
 import { InvoiceStore } from '../store/invoice.store';
-import { Invoice } from '../store/app-store.state';
 import { DataService } from '../services/data.service';
-import { AppStoreService } from '../store/app-store.service';
+import { SohoDataGridComponent } from 'ids-enterprise-ng';
+import { gridOptions } from '../shared/gridOptions';
+import { EventService } from '../services/event.service';
+import { Events } from '../shared/constants';
+import { GlobalStore } from '../store/global-store';
 
 @Component({
-   selector: 'app-invoice-genrated',
-   templateUrl: './invoice-genrated.component.html',
-   styleUrls: ['./invoice-genrated.component.css']
+  selector: 'app-invoice-genrated',
+  templateUrl: './invoice-genrated.component.html',
+  styleUrls: ['./invoice-genrated.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InvoiceGenratedComponent {
-   activeMenuId: string | null = null;
-   invoices$: Observable<Invoice[]>;
+export class InvoiceGenratedComponent implements AfterViewInit {
+  state$!: Observable<any>;
 
-   private subscriptions = new Subscription();
+  @ViewChild(SohoDataGridComponent) dataGrid!: SohoDataGridComponent;
 
-   constructor(
-      private invoiceStore: InvoiceStore,
-      private dataService: DataService,
-      private appStore: AppStoreService
-   ) {
-      this.invoices$ = this.invoiceStore.invoices$;
-   }
+  gridOptions = new gridOptions().invoiceGeneratedGridOptions;
 
-   ngOnInit(): void {
-      // const curDate = this.appStore.getSelectedDate();
-   }
+  activeMenuId = '';
+  constructor(
+    private store: InvoiceStore,
+    private eventService: EventService,
+    private dataService: DataService,
+    private globalStore: GlobalStore,
+  ) {
+    this.state$ = this.store.state$.pipe();
+  }
 
-   ngOnDestroy(): void {
-      this.subscriptions.unsubscribe();
-   }
+  ngAfterViewInit(): void {
+    /**
+     * Setup event subscription
+     */
+    this.setupEvents();
+  }
 
-   toggleMenu(menuId: string): void {
-      this.activeMenuId = this.activeMenuId === menuId ? null : menuId;
-   }
+  /**
+   * Subscribe to events
+   */
+  setupEvents(): void {
+    // Reset fields when a record in selected in MMS025
+    this.eventService.on(Events.dateSelected, () => {
+      this.store.reset();
+    });
 
-   handleAction(action: string): void {
-      console.log('Invoices card action selected:', action);
-      this.activeMenuId = null;
-   }
+    // Populate fields when a warehouse is selected
+    this.eventService.on(Events.dateSelected, () => {
+      this.populateList();
+    });
+  }
 
+  populateList(): void {
+    const selectedDate = this.globalStore.date;
+    const selectedCONO = this.globalStore.userContext?.currentCompany;
 
+    if (selectedDate) {
+      this.store.setBusy(true);
+      this.dataService
+        .fetchInvoiceData(selectedCONO, selectedDate)
+        .pipe(finalize(() => this.store.setBusy(false)))
+        .subscribe({
+          next: (data) => {
+            this.store.setItems(data.items);
+          },
+        });
+    }
+  }
 
+  toggleMenu(menuId: string): void {
+    const menuElement = document.getElementById(menuId);
+    if (menuElement) {
+      const menu = (menuElement as any).sohoMenu;
+      if (menu) {
+        menu.toggle();
+      }
+    }
+  }
+
+  handleAction(action: string): void {
+    switch (action) {
+      case 'export':
+        // this.exportData();
+        break;
+      default:
+        console.warn(`Unhandled action: ${action}`);
+    }
+  }
 }
