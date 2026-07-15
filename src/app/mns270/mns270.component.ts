@@ -4,7 +4,7 @@ import {
    ViewChild,
    ChangeDetectionStrategy,
 } from '@angular/core';
-import { finalize, forkJoin, Observable, Subscription } from 'rxjs';
+import { finalize, forkJoin, Observable, Subscription, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { JobsStore } from '../store/mns270.store';
 import { DataService } from '../services/data.service';
@@ -13,6 +13,7 @@ import { gridOptions } from '../shared/gridOptions';
 import { EventService } from '../services/event.service';
 import { Events } from '../shared/constants';
 import { GlobalStore } from '../store/global-store';
+import { IMIResponse } from '@infor-up/m3-odin';
 
 @Component({
    selector: 'app-mns270',
@@ -57,97 +58,54 @@ export class MNS270Component implements AfterViewInit {
       });
    }
 
-   //   populateList(): void {
-   //     const selectedDate = this.globalStore.date;
-   //     this.store.setBusy(true);
-   //     this.dataService
-   //       .fetchJobs(selectedDate)
-   //       .pipe(finalize(() => this.store.setBusy(false)))
-   //       .subscribe((jobs) => {
-   //         this.getInvoiceandJob(jobs);
-   //       });
-   //   }
-
-   //   getInvoiceandJob(items: any): void {
-   //     items.items.forEach((item: any) => {
-   //       const jobNo = item.C4BJNO;
-   //       this.dataService
-   //         .fetchMNS270(jobNo)
-   //         .pipe(finalize(() => this.store.setBusy(false)))
-   //         .subscribe({
-   //           next: (data: any) => {
-   //             this.store.addItems(data.items);
-   //           },
-   //         });
-   //     });
-   //   }
-
    populateList(): void {
       const selectedDate = this.globalStore.date;
       this.store.setBusy(true);
-      this.dataService.fetchMNS270(selectedDate)
-         .pipe(finalize(() => this.store.setBusy(false)))
-         .subscribe((data: any) => {
+      this.dataService.fetchMNS270(selectedDate).subscribe({
+         next: (data: any) => {
             const items = Array.isArray(data?.items) ? data.items : [];
             if (!items.length) {
                this.store.setItems([]);
+               this.store.setBusy(false);
                return;
             }
 
-            const statusRequests = items.map((item: any) =>
-               this.dataService.fetchJobs(item.UUID).pipe(
-                  map((jobData: any) => ({
-                     ...item,
-                     C4SSTA: jobData?.item?.C4SSTA || 'Unknown',
-                  })),
+            const rowRequests: any[] = items.map((item: any) =>
+               forkJoin({
+                  status: this.dataService.fetchJobs(item.UUID),
+                  idm: this.dataService.fetchIdmXml(item.IVNO),
+               }).pipe(
+                  map(({ status, idm }) => (
+                     console.log('Row details:', idm?.body?.item?.resrs?.res[0]?.url.replace(/\\/g, '')),
+                     {
+                        C4SSTA: status?.item?.C4SSTA || 'Unknown',
+                        FINA: idm?.body?.item?.filename || 'N/A',
+                        LINK: idm?.body?.item?.resrs?.res[0]?.url.replace(/\\/g, '') || 'N/A',
+                     })),
                ),
             );
 
-            forkJoin(statusRequests).subscribe(
-               (enrichedItems: any) => {
-                  // After statuses are enriched, fetch IDM XML per job to extract Updated By
-                  const idmRequests = enrichedItems.map((it: any) => this.dataService.fetchIdmXml(it.UUID));
-
-                  if (!idmRequests.length) {
-                     this.store.setItems(enrichedItems);
-                     return;
-                  }
-
-                  forkJoin(idmRequests).subscribe(
-                     (xmlResults: any) => {
-                        const parseUpdatedBy = (xml: string) => {
-                           if (!xml) { return 'NA'; }
-                           // Try common tag variations
-                           const patterns = [/<(?:UpdatedBy|updatedBy|updated_by|UPDATEDBY)[^>]*>([^<]+)<\/\s*(?:UpdatedBy|updatedBy|updated_by|UPDATEDBY)\s*>/i];
-                           for (const p of patterns) {
-                              const m = xml.match(p);
-                              if (m && m[1]) { return m[1].trim(); }
-                           }
-                           // Fallback: try simple regex for >value< pattern of a likely node
-                           const fallback = xml.match(/>([^<>\n\r]{1,60})<\/?[A-Za-z0-9:_-]*>/);
-                           return fallback ? fallback[1].trim() : 'NA';
-                        };
-
-                        enrichedItems.forEach((row: any, idx: number) => {
-                           const xml = xmlResults[idx] || '';
-                           row.UPDATED_BY = parseUpdatedBy(xml) || 'NA';
-                        });
-
-                        this.store.setItems(enrichedItems);
-                     },
-                     (err) => {
-                        console.error('Failed to fetch IDM XML:', err);
-                        // If IDM fails, still display enriched items with NA
-                        enrichedItems.forEach((row: any) => (row.UPDATED_BY = 'NA'));
-                        this.store.setItems(enrichedItems);
-                     },
-                  );
+            forkJoin(rowRequests).subscribe({
+               next: (rowResults: any[]) => {
+                  const updatedItems = items.map((item: any, index: number) => ({
+                     ...item,
+                     ...rowResults[index],
+                  }));
+                  this.store.setItems(updatedItems);
+                  this.store.setBusy(false);
                },
-               (error) => {
-                  console.error('Failed to fetch job statuses:', error);
+               error: (error) => {
+                  console.error('Failed to fetch row details:', error);
                   this.store.setItems(items);
+                  this.store.setBusy(false);
                },
-            );
-         });
+            });
+         },
+         error: (error) => {
+            console.error('Failed to fetch MNS270 rows:', error);
+            this.store.setItems([]);
+            this.store.setBusy(false);
+         },
+      });
    }
 }

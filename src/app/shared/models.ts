@@ -2,7 +2,8 @@ export interface MNS270Fileds {
    IVNO: string;
    UUID: string;
    C4SSTA: string;
-   UPDATED_BY?: string;
+   FINA?: string;
+   LINK: string;
 }
 
 export interface InvoiceGeneratedFileds {

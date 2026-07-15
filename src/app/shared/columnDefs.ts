@@ -40,10 +40,13 @@ export class ColumnDefs {
          width: 100,
       },
       {
-         id: 'UPDATED_BY',
-         field: 'UPDATED_BY',
-         name: Soho.Locale.translate('UPDATED_BY'),
+         id: 'FINA',
+         field: 'FINA',
+         name: Soho.Locale.translate('FINA'),
          width: 150,
+         formatter: 'Hyperlink',
+         href: (row: any, cell: any, col: any, value: any,) => col?.LINK || "",
+         target: '_blank',
       },
    ];
 
@@ -58,6 +61,12 @@ export class ColumnDefs {
          id: 'UUID',
          field: 'UUID',
          name: Soho.Locale.translate('UUID'),
+         width: 150,
+      },
+      {
+         id: 'EMSG',
+         field: 'EMSG',
+         name: Soho.Locale.translate('EMSG'),
          width: 150,
       },
    ];

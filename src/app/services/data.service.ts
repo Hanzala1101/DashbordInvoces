@@ -51,7 +51,7 @@ export class DataService {
     * Fetch job data from CMS100MI/LstJob
     * @returns Observable with Job array
     */
-   fetchJobs(jobNo: string | null): Observable<any[]> {
+   fetchJobs(jobNo: string | null): Observable<any> {
       return this.callMIAPI('CMS100MI', 'LstJobs', {
          C4BJNO: jobNo,
          C4PRTF: 'OIS199PF',
@@ -82,14 +82,24 @@ export class DataService {
          return from(['']);
       }
       const request = {
-         url: `/IDM/api/items/search/item?query=/M3_SalesInvoice[@M3_InvoiceNumber = "026000065"] `,
+         url: `/IDM/api/items/search/item?%24query=%2FM3_SalesInvoice%5B%40M3_InvoiceNumber%20%3D%20%220${invoNo}%22%5D%20`,
          method: 'GET',
          // record: {
          //    query: `/M3_SalesInvoice[@M3_InvoiceNumber = "26000065"]`,
          // },
-         source: 'https://mingle-ionapi.eu1.inforcloudsuite.com/HPZNVKVUB7E74B6F_DEV',
+         source: 'DEV',
       };
-      return this.ionaAPIService.execute(request)
+
+      const response = this.ionaAPIService.execute(request)
+      return response.pipe(
+         map((res: any) => {
+            return res
+         }),
+         catchError((error) => {
+            console.error('Error fetching IDM XML:', error);
+            return throwError(() => new Error(`IDM API Error: ${error.message}`));
+         }),
+      );
    }
 
 

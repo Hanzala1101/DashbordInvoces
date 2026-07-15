@@ -10,6 +10,8 @@ export const Translations = {
          UUID: { id: 'UUID', value: 'BOD UUID' },
          STAT: { id: 'STAT', value: 'MNS270 Status' },
          PRTF: { id: 'PRTF', value: 'Print File' },
+         FINA: { id: 'FINA', value: 'IDM File' },
+         EMSG: { id: 'EMSG', value: 'Output Status' },
          Invoice_Generated: {
             id: 'Invoice Generated',
             value: 'Invoice Generated',
@@ -27,6 +29,8 @@ export const Translations = {
          UUID: { id: 'UUID', value: 'BOD UUID' },
          STAT: { id: 'STAT', value: 'Statut' },
          PRTF: { id: 'PRTF', value: 'Fichier d\'impression' },
+         FINA: { id: 'FINA', value: 'Fichier IDM' },
+         EMSG: { id: 'EMSG', value: 'Statut de sortie' },
          Invoice_Generated: { id: 'Invoice Generated', value: 'Facture générée' },
       },
    },
