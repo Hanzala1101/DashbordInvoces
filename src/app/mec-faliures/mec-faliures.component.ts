@@ -7,10 +7,11 @@ import {
 import { SohoDataGridComponent } from 'ids-enterprise-ng';
 import { Observable } from 'rxjs';
 import { gridOptions } from '../shared/gridOptions';
-import { FailuresStore } from '../store/Mec-failures.store';
+import { FailuresStore } from '../store/mec-failures.store';
 import { EventService } from '../services/event.service';
 import { DataService } from '../services/data.service';
 import { Events } from '../shared/constants';
+import { GlobalStore } from '../store/global-store';
 
 @Component({
   selector: 'app-mec-faliures',
@@ -29,6 +30,7 @@ export class MecFaliuresComponent implements AfterViewInit {
     private store: FailuresStore,
     private eventService: EventService,
     private dataService: DataService,
+    private globalStore: GlobalStore,
   ) {
     this.state$ = this.store.state$.pipe();
   }
@@ -51,7 +53,14 @@ export class MecFaliuresComponent implements AfterViewInit {
 
       // Populate fields when a warehouse is selected
       this.eventService.on(Events.dateSelected, () => {
-        // this.populateList();
+        this.populateList();
+      });
+    }
+
+    populateList(): void {
+      const selectedDate = this.globalStore.date;
+      this.dataService.listMecError(selectedDate).subscribe((data: any) => {
+        this.store.setItems(data.items);
       });
     }
 }

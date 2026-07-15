@@ -1,12 +1,17 @@
 export interface MNS270Fileds {
-  PK01: string;
-  PK02: string;
+   IVNO: string;
+   UUID: string;
+   C4SSTA: string;
+   UPDATED_BY?: string;
 }
 
 export interface InvoiceGeneratedFileds {
-  REPL: string;
+   REPL: string;
+   INST: string;
+   PRTF?: string;
 }
 
 export interface MECFailureFileds {
-  FAILURE: string;
+   IVNO: string;
+   UUID: string;
 }

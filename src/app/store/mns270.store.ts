@@ -31,4 +31,8 @@ export class JobsStore extends Store<JobsState> {
    this.setState({ ...this.state, data: items, isBusy: false });
   }
 
+  addItems(items: any[]): void {
+   this.setState({ ...this.state, data: [...this.state.data, ...items], isBusy: false });
+  }
+
 }
