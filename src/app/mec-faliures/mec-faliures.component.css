@@ -1,0 +1,10 @@
+.card {
+   max-width: 31vw;
+   overflow-x: scroll;
+}
+
+@media (max-width: 1024px) {
+   .card {
+      max-width: 92vw;
+   }
+}

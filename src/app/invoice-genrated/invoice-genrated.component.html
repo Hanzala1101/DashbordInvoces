@@ -1,16 +1,11 @@
 <div class="card">
-  <div class="card-header">
-    <h2 class="card-title">Invoices Generated EXPORTMI</h2>
-  </div>
-  <div class="card-content">
-    <div
-      *ngIf="state$ | async as state"
-      soho-busyindicator
-      [activated]="state.isBusy"
-      [blockUI]="true"
-      [displayDelay]="0"
-    >
-      <div soho-datagrid [gridOptions]="gridOptions" [data]="state.data"></div>
-    </div>
-  </div>
+   <div class="card-header">
+      <h2 class="card-title">Invoices Generated EXPORTMI</h2>
+   </div>
+   <div class="card-content">
+      <div *ngIf="state$ | async as state" soho-busyindicator [activated]="state.isBusy" [blockUI]="true"
+         [displayDelay]="0">
+         <div soho-datagrid class="soho-datagrid" [gridOptions]="gridOptions" [data]="state.data"></div>
+      </div>
+   </div>
 </div>

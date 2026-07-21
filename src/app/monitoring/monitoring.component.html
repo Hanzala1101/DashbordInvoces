@@ -1,55 +1,44 @@
+<!-- <app-gen-ai></app-gen-ai> -->
 <div class="progress-summary1">
-  <div class="progress-summary">
-    <div class="progress-circle">
-      <svg viewBox="0 0 120 120" class="progress-svg">
-        <circle class="progress-track" cx="60" cy="60" r="48"></circle>
-        <circle
-          class="progress-value"
-          cx="60"
-          cy="60"
-          r="48"
-          [attr.stroke-dasharray]="circumference"
-          [attr.stroke-dashoffset]="strokeOffset"
-        ></circle>
-      </svg>
-      <div class="progress-label">
-        <span class="progress-number">{{ selcompleted }}</span>
-        <span class="progress-total">/ {{ seltotal }}</span>
+   <div class="progress-summary">
+      <div class="progress-circle">
+         <svg viewBox="0 0 120 120" class="progress-svg">
+            <circle class="progress-track" cx="60" cy="60" r="48"></circle>
+            <circle class="progress-value" cx="60" cy="60" r="48" [attr.stroke-dasharray]="circumference"
+               [attr.stroke-dashoffset]="strokeOffset"></circle>
+         </svg>
+         <div class="progress-label">
+            <span class="progress-number">{{ selcompleted }}</span>
+            <span class="progress-total">/ {{ seltotal }}</span>
+         </div>
       </div>
-    </div>
 
-    <div class="progress-text">
-      <h3>Invoice status- SEL</h3>
-      <p>{{ percentage }}% completed</p>
-    </div>
-  </div>
-  <div class="progress-summary">
-    <div class="progress-circle">
-      <svg viewBox="0 0 120 120" class="progress-svg">
-        <circle class="progress-track" cx="60" cy="60" r="48"></circle>
-        <circle
-          class="progress-value"
-          cx="60"
-          cy="60"
-          r="48"
-          [attr.stroke-dasharray]="circumference"
-          [attr.stroke-dashoffset]="strokeOffset"
-        ></circle>
-      </svg>
-      <div class="progress-label">
-        <span class="progress-number">{{ mrocompleted }}</span>
-        <span class="progress-total">/ {{ mrototal }}</span>
+      <div class="progress-text">
+         <h3>Invoice status- SEL</h3>
+         <p>{{ percentage }}% completed</p>
       </div>
-    </div>
+   </div>
+   <div class="progress-summary">
+      <div class="progress-circle">
+         <svg viewBox="0 0 120 120" class="progress-svg">
+            <circle class="progress-track" cx="60" cy="60" r="48"></circle>
+            <circle class="progress-value" cx="60" cy="60" r="48" [attr.stroke-dasharray]="circumference"
+               [attr.stroke-dashoffset]="strokeOffset"></circle>
+         </svg>
+         <div class="progress-label">
+            <span class="progress-number">{{ mrocompleted }}</span>
+            <span class="progress-total">/ {{ mrototal }}</span>
+         </div>
+      </div>
 
-    <div class="progress-text">
-      <h3>Invoice status- MRO</h3>
-      <p>{{ percentage }}% completed</p>
-    </div>
-  </div>
+      <div class="progress-text">
+         <h3>Invoice status- MRO</h3>
+         <p>{{ percentage }}% completed</p>
+      </div>
+   </div>
 </div>
 <div class="card-row">
-  <app-invoice-genrated></app-invoice-genrated>
-  <app-mns270></app-mns270>
-  <app-mec-faliures></app-mec-faliures>
+   <app-invoice-genrated></app-invoice-genrated>
+   <app-mns270></app-mns270>
+   <app-mec-faliures></app-mec-faliures>
 </div>

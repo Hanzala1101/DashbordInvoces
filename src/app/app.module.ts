@@ -11,6 +11,7 @@ import { MNS270Component } from './mns270/mns270.component';
 import { MecFaliuresComponent } from './mec-faliures/mec-faliures.component';
 import { InvoiceGenratedComponent } from './invoice-genrated/invoice-genrated.component';
 import { AppInitializerModule } from './app-initializer.module';
+import { GenAiComponent } from './gen-ai/gen-ai.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +20,7 @@ import { AppInitializerModule } from './app-initializer.module';
     MNS270Component,
     MecFaliuresComponent,
     InvoiceGenratedComponent,
+    GenAiComponent
   ],
   imports: [
     BrowserModule,

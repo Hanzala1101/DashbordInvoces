@@ -1,0 +1,29 @@
+<div class="chatbot-shell">
+   <button type="button" class="chat-toggle" (click)="toggleChat()" aria-label="Open chatbot assistant">
+      <span>💬</span>
+   </button>
+
+   <div class="chat-backdrop" *ngIf="isOpen" (click)="closeChat()"></div>
+
+   <aside class="chat-panel" [class.open]="isOpen" role="dialog" aria-label="Chatbot assistant">
+      <div class="chat-header">
+         <div>
+            <h3>Invoice Assistant</h3>
+            <p>Ask anything about invoices and monitoring</p>
+         </div>
+         <button type="button" class="close-btn" (click)="closeChat()" aria-label="Close chatbot">✕</button>
+      </div>
+
+      <div class="chat-body">
+         <div *ngFor="let message of chatMessages" class="bubble" [ngClass]="message.type === 'user' ? 'user' : 'bot'">
+            {{ message.text }}
+         </div>
+      </div>
+
+      <div class="chat-footer">
+         <!-- <input type="text" placeholder="Type your message..." /> -->
+         <button type="button" onclick="onClick('Tell me the status of invoices today')">Tell me the status of invoices
+            today</button>
+      </div>
+   </aside>
+</div>

@@ -16,3 +16,8 @@ export interface MECFailureFileds {
    IVNO: string;
    UUID: string;
 }
+
+export interface GenAiFileds {
+   userText: string;
+   bodText: string;
+}

@@ -1,17 +1,20 @@
 import { Injectable } from '@angular/core';
 import { Observable, throwError, from } from 'rxjs';
 import { map, catchError, tap, switchMap } from 'rxjs/operators';
-import { IonApiService, MIService } from '@infor-up/m3-odin-angular';
+import { IonApiService, MIService, ApplicationService } from '@infor-up/m3-odin-angular';
+import { GlobalStore } from '../store/global-store';
 
 @Injectable({
    providedIn: 'root',
 })
 export class DataService {
-   constructor(private miService: MIService, private ionaAPIService: IonApiService) {
+   constructor(private miService: MIService, private ionaAPIService: IonApiService, private applicationservice: ApplicationService) {
       this.miService = miService;
       this.ionaAPIService = ionaAPIService;
+      this.applicationservice = applicationservice;
    }
-
+   api = "https://mingle-ionapi.eu1.inforcloudsuite.com/HPZNVKVUB7E74B6F_DEV/GENAI/chatsvc";
+   api1 = "https://mingle-ionapi.inforcloudsuite.com/GBEA5YY64NVRWGT4_AX1/GENAI/chatsvc"
    /**
     * Call EXPORTMI API to fetch invoice data
     * @returns Observable with invoice, stats, and failure data
@@ -55,6 +58,16 @@ export class DataService {
       return this.callMIAPI('CMS100MI', 'LstJobs', {
          C4BJNO: jobNo,
          C4PRTF: 'OIS199PF',
+      });
+   }
+   /**
+    * Fetch job data from CMS100MI/LstJob
+    * @returns Observable with Job array
+    */
+   fetchFiles(jobNo: string | null): Observable<any> {
+      return this.callMIAPI('CMS100MI', 'LstFiles', {
+         CXBJNO: jobNo,
+         CXPRTF: 'OIS199PF',
       });
    }
    /**
@@ -123,6 +136,41 @@ export class DataService {
          PRTF: "OIS199PF",
          GEN1: qDate,
       });
+   }
+
+   getSession(): void {
+      const request = {
+         url: `/GENAI/chatsvc/api/v1/sessions`,
+         method: 'POST',
+         record: {
+            name: `Hanzala`,
+         },
+         source: 'DEV',
+      };
+      this.ionaAPIService.execute(request).subscribe((res: any) => localStorage.setItem("chatsrv", res.item.id))
+   }
+
+   askGenAI(text: string): Observable<any> {
+      const payload = {
+         prompt: text,
+         session: localStorage.getItem('chatsrv') || '',
+         tools: ['HEALTH_InvoiceMonitorMNS270_Agent'],
+         ibcPayload: {
+            additionalProp1: {}
+         },
+         focusMode: 'invoice',
+         streamMode: 'complete'
+      };
+      const request = {
+         url: `/GENAI/chatsvc/api/v1/chat/sync`,
+         method: 'GET',
+         record: {
+            query: payload,
+         },
+         source: 'DEV',
+      };
+
+      return this.ionaAPIService.execute(request)
    }
    /**
     * Generic method to call any M3 API using MIService
