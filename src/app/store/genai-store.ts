@@ -36,29 +36,35 @@ export class GenAiStore extends Store<GenAiState> {
    }
 
    setuserText(text: string) {
-      const updatedData = [...this.state.data];
-      const existingItem = updatedData[this.state.index];
-
-      if (existingItem) {
-         existingItem.user = text;
-      } else {
-         updatedData.push({ user: text, bod: '' } as GenAiFileds);
+      if (!this.state.data.length) {
+         return;
       }
 
-      this.setState({ ...this.state, data: updatedData });
+      const updatedData = [...this.state.data];
+
+      updatedData[this.state.index] = {
+         ...updatedData[this.state.index],
+         user: text
+      };
+
+      this.setState({
+         ...this.state,
+         data: updatedData
+      });
    }
 
    setBotText(text: string) {
       const updatedData = [...this.state.data];
-      const existingItem = updatedData[this.state.index];
 
-      if (existingItem) {
-         existingItem.bod = text;
-      } else {
-         updatedData.push({ user: '', bod: text } as GenAiFileds);
-      }
+      updatedData[this.state.index] = {
+         ...updatedData[this.state.index],
+         bod: text
+      };
 
-      this.setState({ ...this.state, data: updatedData });
+      this.setState({
+         ...this.state,
+         data: updatedData
+      });
       this.state.index++;
    }
 

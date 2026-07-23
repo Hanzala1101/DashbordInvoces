@@ -14,8 +14,8 @@
          <button type="button" class="close-btn" (click)="closeChat()" aria-label="Close chatbot">✕</button>
       </div>
 
-      <div class="chat-body">
-         <div *ngFor="let item of data" class="chat-row">
+      <div class="chat-body"*ngIf="state$ | async as state">
+         <div *ngFor="let item of state.data" class="chat-row">
             <div *ngIf="item.user" class="bubble user">
                {{ item.user }}
             </div>
@@ -27,17 +27,19 @@
 
       <div class="chat-footer">
          <ng-container *ngIf="!hasBotReply; else chatInputFooter">
-            <button type="button" [disabled]="isBuzy" (click)="onClick('Tell me the status of invoices today')">
-               <span *ngIf="isBuzy" class="busy-indicator" aria-hidden="true"></span>
-               <span>{{ isBuzy ? 'Working...' : 'Tell me the status of invoices today' }}</span>
+            <button type="button" *ngIf="state$ | async as state" [disabled]="state.isBuzy"
+               (click)="onClick('Tell me the status of invoices today')">
+               <span *ngIf="state.isBuzy" class="busy-indicator" aria-hidden="true"></span>
+               <span>{{ state.isBuzy ? 'Working...' : 'Tell me the status of invoices today' }}</span>
             </button>
          </ng-container>
 
          <ng-template #chatInputFooter>
             <input type="text" placeholder="Type your message..." [(ngModel)]="draftMessage" />
-            <button type="button" [disabled]="isBuzy || !draftMessage?.trim()" (click)="sendDraftMessage()">
-               <span *ngIf="isBuzy" class="busy-indicator" aria-hidden="true"></span>
-               <span>{{ isBuzy ? 'Working...' : 'Send' }}</span>
+            <button type="button" *ngIf="state$ | async as state" [disabled]="state.isBuzy || !draftMessage?.trim()"
+               (click)="sendDraftMessage()">
+               <span *ngIf="state.isBuzy" class="busy-indicator" aria-hidden="true"></span>
+               <span>{{ state.isBuzy ? 'Working...' : 'Send' }}</span>
             </button>
          </ng-template>
       </div>

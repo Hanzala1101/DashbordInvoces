@@ -13,7 +13,6 @@ import { gridOptions } from '../shared/gridOptions';
 import { EventService } from '../services/event.service';
 import { Events } from '../shared/constants';
 import { GlobalStore } from '../store/global-store';
-import { IMIResponse } from '@infor-up/m3-odin';
 
 @Component({
    selector: 'app-mns270',
@@ -77,11 +76,7 @@ export class MNS270Component implements AfterViewInit {
                   return;
                }
 
-               const enricheditems = items.map((item: any) => {
-                  if (item.UUID.length < 19) {
-                     return item;
-                  }
-               });
+               const enricheditems = items.filter((item: any) => item && item.UUID.length < 19).map((item: any) => ({ ...item }));
 
                const rowRequests: any[] = enricheditems.map((item: any) =>
                   forkJoin({
@@ -90,10 +85,6 @@ export class MNS270Component implements AfterViewInit {
                   }).pipe(
                      map(
                         ({ status, idm }) => (
-                           console.log(
-                              'Row details:',
-                              idm?.body?.item?.resrs?.res[0]?.url.replace(/\\/g, ''),
-                           ),
                            {
                               C4SSTA: status?.item?.CXSSTA || 'Unknown',
                               FINA: status?.item?.CXEMSG || idm?.body?.item?.filename || 'N/A',

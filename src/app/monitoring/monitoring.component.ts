@@ -35,7 +35,7 @@ export class MonitoringComponent implements AfterViewInit {
       return Math.round((this.selcompleted / this.seltotal) * 100);
    }
    get mropercentage(): number {
-      return Math.round((this.mrocompleted / this.seltotal) * 100);
+      return Math.round((this.mrocompleted / this.mrototal) * 100);
    }
 
    get circumference(): number {

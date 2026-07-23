@@ -2,7 +2,6 @@ import { AfterViewInit, Component } from '@angular/core';
 import { GenAiStore } from '../store/genai-store';
 import { finalize, Observable } from 'rxjs';
 import { DataService } from '../services/data.service';
-import { SohoToastModule } from 'ids-enterprise-ng';
 
 @Component({
    selector: 'app-gen-ai',
@@ -14,7 +13,8 @@ export class GenAiComponent implements AfterViewInit {
    draftMessage = '';
 
    constructor(private store: GenAiStore, private datasirvice: DataService) {
-      this.state$ = this.store.state$;
+      this.state$ = this.store.state$.pipe();
+
    }
 
    ngAfterViewInit(): void {
@@ -22,9 +22,7 @@ export class GenAiComponent implements AfterViewInit {
       this.store.setBotText("Hi, How can i assist you ?")
    }
 
-   get isBuzy(): boolean {
-      return this.store.state.isBusy;
-   }
+
    get isOpen(): boolean {
       return this.store.state.isopen;
    }
