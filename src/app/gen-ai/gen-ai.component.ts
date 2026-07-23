@@ -1,7 +1,8 @@
 import { AfterViewInit, Component } from '@angular/core';
 import { GenAiStore } from '../store/genai-store';
-import { Observable } from 'rxjs';
+import { finalize, Observable } from 'rxjs';
 import { DataService } from '../services/data.service';
+import { SohoToastModule } from 'ids-enterprise-ng';
 
 @Component({
    selector: 'app-gen-ai',
@@ -10,6 +11,7 @@ import { DataService } from '../services/data.service';
 })
 export class GenAiComponent implements AfterViewInit {
    state$!: Observable<any>;
+   draftMessage = '';
 
    constructor(private store: GenAiStore, private datasirvice: DataService) {
       this.state$ = this.store.state$;
@@ -17,8 +19,12 @@ export class GenAiComponent implements AfterViewInit {
 
    ngAfterViewInit(): void {
       this.datasirvice.getSession()
+      this.store.setBotText("Hi, How can i assist you ?")
    }
 
+   get isBuzy(): boolean {
+      return this.store.state.isBusy;
+   }
    get isOpen(): boolean {
       return this.store.state.isopen;
    }
@@ -29,6 +35,10 @@ export class GenAiComponent implements AfterViewInit {
 
    get selectedItem(): any {
       return this.store.state.selectedItem;
+   }
+
+   get hasBotReply(): boolean {
+      return this.data.some((item) => !!item.user);
    }
 
    get chatMessages(): Array<{ type: 'bot' | 'user'; text: string }> {
@@ -87,20 +97,38 @@ export class GenAiComponent implements AfterViewInit {
    }
 
    onClick(text: string): void {
-      if (localStorage.getItem('ChatSrv')) {
+      if (localStorage.getItem('chatsrv')) {
          this.store.setuserText(text);
-         this.datasirvice.askGenAI(text).subscribe({
-            next: (response) => {
-               const botContent = response?.item.content || response?.item.message || '';
-               this.store.setBotText(botContent);
-            },
-            error: (error) => {
-               console.error('GenAI request failed:', error);
-               this.store.setBotText('Sorry, I could not get a response.');
-            }
-         });
+         this.store.setBusy(true);
+         this.datasirvice.askGenAI(text).pipe(finalize(() => this.store.setBusy(false)))
+            .subscribe({
+               next: (response) => {
+                  // const botContent = response.body.content;
+                  this.store.setBotText(response.body.content);
+                  this.store.setBusy(false)
+               },
+               error: (error) => {
+                  console.error('GenAI request failed:', error);
+                  this.store.setBotText('Sorry, I could not get a response.');
+               }
+            });
       } else {
-         alert('session not yet started');
+         $('body').toast({
+            title: 'Session for Chat',
+            message: 'Session not started yet Refresh...'
+         });
+         this.store.setBusy(true);
+         this.store.setuserText(text);
       }
+   }
+
+   sendDraftMessage(): void {
+      const text = this.draftMessage?.trim();
+      if (!text) {
+         return;
+      }
+
+      this.draftMessage = '';
+      this.onClick(text);
    }
 }

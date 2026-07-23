@@ -18,6 +18,6 @@ export interface MECFailureFileds {
 }
 
 export interface GenAiFileds {
-   userText: string;
-   bodText: string;
+   user: string;
+   bod: string;
 }

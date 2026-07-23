@@ -7,6 +7,7 @@ class GenAiState {
    isopen: boolean = false;
    data: GenAiFileds[] = [];
    selectedItem: any = null;
+   index = 0;
 }
 
 
@@ -36,12 +37,12 @@ export class GenAiStore extends Store<GenAiState> {
 
    setuserText(text: string) {
       const updatedData = [...this.state.data];
-      const existingItem = updatedData[0];
+      const existingItem = updatedData[this.state.index];
 
       if (existingItem) {
-         existingItem.userText = text;
+         existingItem.user = text;
       } else {
-         updatedData.push({ userText: text, bodText: '' } as GenAiFileds);
+         updatedData.push({ user: text, bod: '' } as GenAiFileds);
       }
 
       this.setState({ ...this.state, data: updatedData });
@@ -49,15 +50,16 @@ export class GenAiStore extends Store<GenAiState> {
 
    setBotText(text: string) {
       const updatedData = [...this.state.data];
-      const existingItem = updatedData[updatedData.length - 1];
+      const existingItem = updatedData[this.state.index];
 
       if (existingItem) {
-         existingItem.bodText = text;
+         existingItem.bod = text;
       } else {
-         updatedData.push({ userText: '', bodText: text } as GenAiFileds);
+         updatedData.push({ user: '', bod: text } as GenAiFileds);
       }
 
       this.setState({ ...this.state, data: updatedData });
+      this.state.index++;
    }
 
    addItems(items: any[]): void {

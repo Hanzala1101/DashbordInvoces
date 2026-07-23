@@ -5,7 +5,7 @@
          <svg viewBox="0 0 120 120" class="progress-svg">
             <circle class="progress-track" cx="60" cy="60" r="48"></circle>
             <circle class="progress-value" cx="60" cy="60" r="48" [attr.stroke-dasharray]="circumference"
-               [attr.stroke-dashoffset]="strokeOffset"></circle>
+               [attr.stroke-dashoffset]="selstrokeOffset"></circle>
          </svg>
          <div class="progress-label">
             <span class="progress-number">{{ selcompleted }}</span>
@@ -15,7 +15,7 @@
 
       <div class="progress-text">
          <h3>Invoice status- SEL</h3>
-         <p>{{ percentage }}% completed</p>
+         <p>{{ selpercentage }}% completed</p>
       </div>
    </div>
    <div class="progress-summary">
@@ -23,7 +23,7 @@
          <svg viewBox="0 0 120 120" class="progress-svg">
             <circle class="progress-track" cx="60" cy="60" r="48"></circle>
             <circle class="progress-value" cx="60" cy="60" r="48" [attr.stroke-dasharray]="circumference"
-               [attr.stroke-dashoffset]="strokeOffset"></circle>
+               [attr.stroke-dashoffset]="mrostrokeOffset"></circle>
          </svg>
          <div class="progress-label">
             <span class="progress-number">{{ mrocompleted }}</span>
@@ -33,7 +33,7 @@
 
       <div class="progress-text">
          <h3>Invoice status- MRO</h3>
-         <p>{{ percentage }}% completed</p>
+         <p>{{ mropercentage }}% completed</p>
       </div>
    </div>
 </div>

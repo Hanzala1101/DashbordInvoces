@@ -142,12 +142,15 @@ export class DataService {
       const request = {
          url: `/GENAI/chatsvc/api/v1/sessions`,
          method: 'POST',
-         record: {
+         body: {
             name: `Hanzala`,
          },
          source: 'DEV',
       };
-      this.ionaAPIService.execute(request).subscribe((res: any) => localStorage.setItem("chatsrv", res.item.id))
+      this.ionaAPIService.execute(request).subscribe((res: any) => {
+         console.log(res, "resonse if session", res.body)
+         localStorage.setItem("chatsrv", res.body.id)
+      })
    }
 
    askGenAI(text: string): Observable<any> {
@@ -163,10 +166,8 @@ export class DataService {
       };
       const request = {
          url: `/GENAI/chatsvc/api/v1/chat/sync`,
-         method: 'GET',
-         record: {
-            query: payload,
-         },
+         method: 'POST',
+         body: payload,
          source: 'DEV',
       };
 

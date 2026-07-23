@@ -15,15 +15,31 @@
       </div>
 
       <div class="chat-body">
-         <div *ngFor="let message of chatMessages" class="bubble" [ngClass]="message.type === 'user' ? 'user' : 'bot'">
-            {{ message.text }}
+         <div *ngFor="let item of data" class="chat-row">
+            <div *ngIf="item.user" class="bubble user">
+               {{ item.user }}
+            </div>
+            <div *ngIf="item.bod" class="bubble bot">
+               {{ item.bod }}
+            </div>
          </div>
       </div>
 
       <div class="chat-footer">
-         <!-- <input type="text" placeholder="Type your message..." /> -->
-         <button type="button" onclick="onClick('Tell me the status of invoices today')">Tell me the status of invoices
-            today</button>
+         <ng-container *ngIf="!hasBotReply; else chatInputFooter">
+            <button type="button" [disabled]="isBuzy" (click)="onClick('Tell me the status of invoices today')">
+               <span *ngIf="isBuzy" class="busy-indicator" aria-hidden="true"></span>
+               <span>{{ isBuzy ? 'Working...' : 'Tell me the status of invoices today' }}</span>
+            </button>
+         </ng-container>
+
+         <ng-template #chatInputFooter>
+            <input type="text" placeholder="Type your message..." [(ngModel)]="draftMessage" />
+            <button type="button" [disabled]="isBuzy || !draftMessage?.trim()" (click)="sendDraftMessage()">
+               <span *ngIf="isBuzy" class="busy-indicator" aria-hidden="true"></span>
+               <span>{{ isBuzy ? 'Working...' : 'Send' }}</span>
+            </button>
+         </ng-template>
       </div>
    </aside>
 </div>

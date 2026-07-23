@@ -32,6 +32,7 @@ export class ColumnDefs {
          id: 'C4SSTA',
          field: 'C4SSTA',
          name: Soho.Locale.translate('STAT'),
+         
       },
       {
          id: 'FINA',
