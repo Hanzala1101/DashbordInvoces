@@ -19,7 +19,7 @@ export class GenAiComponent implements AfterViewInit {
 
    ngAfterViewInit(): void {
       this.datasirvice.getSession()
-      this.store.setBotText("Hi, How can i assist you ?")
+      this.store.setBotText("Hi, How can I assist you ?")
    }
 
 

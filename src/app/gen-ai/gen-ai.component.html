@@ -9,12 +9,12 @@
       <div class="chat-header">
          <div>
             <h3>Invoice Assistant</h3>
-            <p>Ask anything about invoices and monitoring</p>
+            <p>Ask anything about Invoice Monitoring</p>
          </div>
          <button type="button" class="close-btn" (click)="closeChat()" aria-label="Close chatbot">✕</button>
       </div>
 
-      <div class="chat-body"*ngIf="state$ | async as state">
+      <div class="chat-body" *ngIf="state$ | async as state">
          <div *ngFor="let item of state.data" class="chat-row">
             <div *ngIf="item.user" class="bubble user">
                {{ item.user }}
@@ -36,10 +36,10 @@
 
          <ng-template #chatInputFooter>
             <input type="text" placeholder="Type your message..." [(ngModel)]="draftMessage" />
-            <button type="button" *ngIf="state$ | async as state" [disabled]="state.isBuzy || !draftMessage?.trim()"
+            <button type="button" *ngIf="state$ | async as state" [disabled]="state.isBusy || !draftMessage?.trim()"
                (click)="sendDraftMessage()">
-               <span *ngIf="state.isBuzy" class="busy-indicator" aria-hidden="true"></span>
-               <span>{{ state.isBuzy ? 'Working...' : 'Send' }}</span>
+               <span *ngIf="state.isBusy" class="busy-indicator" aria-hidden="true"></span>
+               <span>{{ state.isBusy ? 'Working...' : 'Send' }}</span>
             </button>
          </ng-template>
       </div>
