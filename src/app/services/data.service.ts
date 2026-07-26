@@ -64,24 +64,20 @@ export class DataService {
     * Fetch job data from CMS100MI/LstJob
     * @returns Observable with Job array
     */
-   fetchFiles(jobNo: string | null): Observable<any> {
+   fetchFiles(jobNo: string | null, printFile: string | null): Observable<any> {
       return this.callMIAPI('CMS100MI', 'LstFiles', {
          CXBJNO: jobNo,
-         CXPRTF: 'OIS199PF',
+         CXPRTF: printFile,
       });
    }
    /**
     * Fetch MNS270 data from CUSEXTMI/LstFieldValue
     * @returns Observable with MNS270 array
     */
-   fetchMNS270(date: string): Observable<any[]> {
-      // return this.callMIAPI('CUSEXTMI', 'LstFieldValue', {
-      //    FILE: 'HACKATHON',
-      //    PK01: jobNo,
-      // });
+   fetchMNS270(date: string, printFile: string | null): Observable<any[]> {
       const qDate = (date || '').replace(/-/g, '');
       return this.callMIAPI('EXT780MI', 'List', {
-         PRTF: "OIS199PF",
+         PRTF: printFile,
          GEN1: qDate,
          EMSG: "OINVIP",
       });

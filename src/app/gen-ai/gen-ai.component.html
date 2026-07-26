@@ -4,44 +4,51 @@
    </button>
 
    <div class="chat-backdrop" *ngIf="isOpen" (click)="closeChat()"></div>
-
-   <aside class="chat-panel" [class.open]="isOpen" role="dialog" aria-label="Chatbot assistant">
-      <div class="chat-header">
-         <div>
-            <h3>Invoice Assistant</h3>
-            <p>Ask anything about Invoice Monitoring</p>
-         </div>
-         <button type="button" class="close-btn" (click)="closeChat()" aria-label="Close chatbot">✕</button>
-      </div>
-
-      <div class="chat-body" *ngIf="state$ | async as state">
-         <div *ngFor="let item of state.data" class="chat-row">
-            <div *ngIf="item.user" class="bubble user">
-               {{ item.user }}
+   <form (submit)="sendDraftMessage($event);">
+      <aside class="chat-panel" [class.open]="isOpen" role="dialog" aria-label="Chatbot assistant">
+         <div class="chat-header">
+            <div>
+               <h3>Invoice Assistant</h3>
+               <p>Ask anything about Invoice Monitoring</p>
             </div>
-            <div *ngIf="item.bod" class="bubble bot">
-               {{ item.bod }}
+            <button type="button" class="close-btn" (click)="closeChat()" aria-label="Close chatbot">
+               ✕
+            </button>
+         </div>
+
+         <div class="chat-body" *ngIf="state$ | async as state">
+            <div *ngFor="let item of state.data" class="chat-row">
+               <div *ngIf="item.user" class="bubble user">
+                  {{ item.user }}
+               </div>
+               <div *ngIf="item.bod" class="bubble bot">
+                  {{ item.bod }}
+               </div>
             </div>
          </div>
-      </div>
 
-      <div class="chat-footer">
-         <ng-container *ngIf="!hasBotReply; else chatInputFooter">
-            <button type="button" *ngIf="state$ | async as state" [disabled]="state.isBuzy"
-               (click)="onClick('Tell me the status of invoices today')">
-               <span *ngIf="state.isBuzy" class="busy-indicator" aria-hidden="true"></span>
-               <span>{{ state.isBuzy ? 'Working...' : 'Tell me the status of invoices today' }}</span>
-            </button>
-         </ng-container>
+         <div class="chat-footer">
+            <ng-container *ngIf="!hasBotReply; else chatInputFooter">
+               <button type="button" *ngIf="state$ | async as state" [disabled]="state.isBuzy"
+                  (click)="onClick('Tell me the status of invoices today')">
+                  <span *ngIf="state.isBuzy" class="busy-indicator" aria-hidden="true"></span>
+                  <span>{{
+                     state.isBuzy
+                     ? "Working..."
+                     : "Tell me the status of invoices today"
+                     }}</span>
+               </button>
+            </ng-container>
 
-         <ng-template #chatInputFooter>
-            <input type="text" placeholder="Type your message..." [(ngModel)]="draftMessage" />
-            <button type="button" *ngIf="state$ | async as state" [disabled]="state.isBusy || !draftMessage?.trim()"
-               (click)="sendDraftMessage()">
-               <span *ngIf="state.isBusy" class="busy-indicator" aria-hidden="true"></span>
-               <span>{{ state.isBusy ? 'Working...' : 'Send' }}</span>
-            </button>
-         </ng-template>
-      </div>
-   </aside>
+            <ng-template #chatInputFooter>
+               <input type="text" placeholder="Type your message..." [value]="draftMessage" (input)="draftMessage = $any($event.target).value" />
+               <button type="button" *ngIf="state$ | async as state" [disabled]="state.isBusy || !draftMessage?.trim()"
+                  (click)="sendDraftMessage($event)">
+                  <span *ngIf="state.isBusy" class="busy-indicator" aria-hidden="true"></span>
+                  <span>{{ state.isBusy ? "Working..." : "Send" }}</span>
+               </button>
+            </ng-template>
+         </div>
+      </aside>
+   </form>
 </div>

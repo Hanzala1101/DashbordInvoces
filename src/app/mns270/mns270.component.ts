@@ -1,8 +1,8 @@
 import {
-   Component,
-   AfterViewInit,
-   ViewChild,
-   ChangeDetectionStrategy,
+  Component,
+  AfterViewInit,
+  ViewChild,
+  ChangeDetectionStrategy,
 } from '@angular/core';
 import { finalize, forkJoin, Observable, Subscription, of } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -15,110 +15,111 @@ import { Events } from '../shared/constants';
 import { GlobalStore } from '../store/global-store';
 
 @Component({
-   selector: 'app-mns270',
-   templateUrl: './mns270.component.html',
-   styleUrls: ['./mns270.component.css'],
-   changeDetection: ChangeDetectionStrategy.OnPush,
+  selector: 'app-mns270',
+  templateUrl: './mns270.component.html',
+  styleUrls: ['./mns270.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MNS270Component implements AfterViewInit {
-   state$!: Observable<any>;
+  state$!: Observable<any>;
 
-   @ViewChild(SohoDataGridComponent) dataGrid!: SohoDataGridComponent;
+  @ViewChild(SohoDataGridComponent) dataGrid!: SohoDataGridComponent;
 
-   gridOptions = new gridOptions().mnS270GridOptions;
-   constructor(
-      private store: JobsStore,
-      private eventService: EventService,
-      private dataService: DataService,
-      private globalStore: GlobalStore,
-   ) {
-      this.state$ = this.store.state$.pipe();
-   }
+  gridOptions = new gridOptions().mnS270GridOptions;
+  constructor(
+    private store: JobsStore,
+    private eventService: EventService,
+    private dataService: DataService,
+    private globalStore: GlobalStore,
+  ) {
+    this.state$ = this.store.state$.pipe();
+  }
 
-   ngAfterViewInit(): void {
-      /**
-       * Setup event subscription
-       */
-      this.setupEvents();
-   }
+  ngAfterViewInit(): void {
+    /**
+     * Setup event subscription
+     */
+    this.setupEvents();
+  }
 
-   /**
-    * Subscribe to events
-    */
-   setupEvents(): void {
-      // Reset fields when a record in selected in MMS025
-      this.eventService.on(Events.dateSelected, () => {
-         this.store.reset();
-      });
+  /**
+   * Subscribe to events
+   */
+  setupEvents(): void {
+    // Reset fields when a record in selected in MMS025
+    this.eventService.on(Events.dateSelected, () => {
+      this.store.reset();
+    });
 
-      // Populate fields when a warehouse is selected
-      this.eventService.on(Events.dateSelected, () => {
-         this.populateList();
-      });
-   }
+    // Populate fields when a warehouse is selected
+    this.eventService.on(Events.dateSelected, () => {
+      this.populateList();
+    });
+  }
 
-   populateList(): void {
-      const selectedDate = this.globalStore.date;
-      this.store.setBusy(true);
-      this.dataService
-         .fetchMNS270(selectedDate)
-         .pipe(
-            finalize(() => {
-               this.store.setBusy(false);
-            }),
-         )
-         .subscribe({
-            next: (data: any) => {
-               const items = Array.isArray(data?.items) ? data.items : [];
-               if (!items.length) {
-                  this.store.setItems([]);
-                  this.store.setBusy(false);
-                  return;
-               }
+  populateList(): void {
+    const selectedDate = this.globalStore.date;
+    this.store.setBusy(true);
 
-               const enricheditems = items.filter((item: any) => item && item.UUID.length < 19).map((item: any) => ({ ...item }));
+    forkJoin({
+      ois199: this.dataService.fetchMNS270(selectedDate, 'OIS199PF'),
+      cos184: this.dataService.fetchMNS270(selectedDate, 'COS184PF'),
+    })
+      .pipe(finalize(() => this.store.setBusy(false)))
+      .subscribe({
+        next: ({ ois199, cos184 }) => {
+          // Merge items from both APIs
+          const normalize = (val: any) => {
+            if (Array.isArray(val)) return val;
+            if (val && Array.isArray(val.items)) return val.items;
+            return [];
+          };
 
-               const rowRequests: any[] = enricheditems.map((item: any) =>
-                  forkJoin({
-                     status: this.dataService.fetchFiles(item.UUID),
-                     idm: this.dataService.fetchIdmXml(item.IVNO),
-                  }).pipe(
-                     map(
-                        ({ status, idm }) => (
-                           {
-                              C4SSTA: status?.item?.CXSSTA || 'Unknown',
-                              FINA: status?.item?.CXEMSG || idm?.body?.item?.filename || 'N/A',
-                              LINK:
-                                 idm?.body?.item?.resrs?.res[0]?.url.replace(/\\/g, '') || 'N/A',
-                           }
-                        ),
-                     ),
-                  ),
-               );
+          const items = [
+            ...normalize(ois199),
+            ...normalize(cos184),
+          ];
 
-               forkJoin(rowRequests).subscribe({
-                  next: (rowResults: any[]) => {
-                     const updatedItems = enricheditems.map(
-                        (item: any, index: number) => ({
-                           ...item,
-                           ...rowResults[index],
-                        }),
-                     );
-                     this.store.setItems(updatedItems);
-                     this.store.setBusy(false);
-                  },
-                  error: (error) => {
-                     console.error('Failed to fetch row details:', error);
-                     this.store.setItems(enricheditems);
-                     this.store.setBusy(false);
-                  },
-               });
+          if (!items.length) {
+            this.store.setItems([]);
+            return;
+          }
+
+          const enrichedItems = items
+            .filter((item: any) => item?.UUID && item.UUID.length < 19)
+            .map((item: any) => ({ ...item }));
+
+          const rowRequests = enrichedItems.map((item: any) =>
+            forkJoin({
+              status: this.dataService.fetchFiles(item.UUID, item.PRTF),
+              idm: this.dataService.fetchIdmXml(item.IVNO),
+            }).pipe(
+              map(({ status, idm }) => ({
+                ...item,
+                C4SSTA: status?.item?.CXSSTA || 'Unknown',
+                FINA:
+                  status?.item?.CXEMSG || idm?.body?.item?.filename || 'Not found',
+                LINK:
+                  idm?.body?.item?.resrs?.res?.[0]?.url?.replace(/\\/g, '') ||
+                  'file not found',
+              })),
+            ),
+          );
+
+          forkJoin(rowRequests).subscribe({
+            next: (updatedItems) => {
+              this.store.setItems(updatedItems);
             },
-            error: (error) => {
-               console.error('Failed to fetch MNS270 rows:', error);
-               this.store.setItems([]);
-               this.store.setBusy(false);
+            error: (err) => {
+              console.error('Failed to fetch row details:', err);
+              this.store.setItems(enrichedItems);
             },
-         });
-   }
+          });
+        },
+        error: (err) => {
+          console.error('Failed to fetch MNS270 data:', err);
+          this.store.setItems([]);
+        },
+      });
+  }
 }

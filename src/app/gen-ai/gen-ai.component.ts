@@ -120,7 +120,8 @@ export class GenAiComponent implements AfterViewInit {
       }
    }
 
-   sendDraftMessage(): void {
+   sendDraftMessage(event: Event): void {
+      event?.preventDefault();
       const text = this.draftMessage?.trim();
       if (!text) {
          return;
