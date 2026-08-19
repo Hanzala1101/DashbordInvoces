@@ -16,7 +16,7 @@ import { DateUtil } from './shared/utils';
    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent extends CoreBase implements AfterViewInit {
-   version = 'V 1.5.9';
+   version = 'V 1.6.1';
    state$!: any;
    selectedDateInput = DateUtil.formatDateForInput(new Date());
 

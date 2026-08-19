@@ -99,7 +99,7 @@ export class MNS270Component implements AfterViewInit {
                 C4SSTA: status?.item?.CXSSTA || 'Unknown',
                 FINA:
                   //status?.item?.CXEMSG || idm?.body?.item?.filename || 'Not found',
-                  status?.item?.CMEMSG?.trim() ? 'IDM Integration error : '+ status?.item?.CMEMSG?.trim() : (idm?.body?.item?.filename || 'Not found'),
+                  status?.item?.CMEMSG?.trim() ? 'IDM Integration error : '+ status?.item?.CMEMSG?.trim() : (idm?.body?.item?.filename || 'IDM Integration error : File not found'),
                 LINK:
                   idm?.body?.item?.resrs?.res?.[0]?.url?.replace(/\\/g, '') ||
                   'file not found',

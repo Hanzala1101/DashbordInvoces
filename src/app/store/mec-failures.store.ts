@@ -28,6 +28,6 @@ export class FailuresStore extends Store<FailuresState> {
   }
 
   setItems(items: any[]): void {
-    this.setState({ ...this.state, data: items, isBusy: false });
+    this.setState({ ...this.state, data: [...this.state.data, ...items], isBusy: false });
   }
 }

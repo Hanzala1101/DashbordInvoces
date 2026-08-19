@@ -59,13 +59,24 @@ export class MecFaliuresComponent implements AfterViewInit {
 
    populateList(): void {
       const selectedDate = this.globalStore.date;
-      this.dataService.listMecError(selectedDate).subscribe((data: any) => {
+      this.dataService.listMecError(selectedDate, 'OIS199PF').subscribe((data: any) => {
          const enrichedData = data.items.map((item: any) => {
             if (item.EMSG === 'OINVIP') {
-          return '';
-        } else {
-          return item;
-        }
+               return '';
+            } else {
+               return item;
+            }
+         });
+         this.store.setItems(enrichedData);
+      });
+
+      this.dataService.listMecError(selectedDate, 'COS184PF').subscribe((data: any) => {
+         const enrichedData = data.items.map((item: any) => {
+            if (item.EMSG === 'ACUACC') {
+               return '';
+            } else {
+               return item;
+            }
          });
          this.store.setItems(enrichedData);
       });

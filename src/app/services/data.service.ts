@@ -132,10 +132,10 @@ export class DataService {
     * Fetch job data from CMS100MI/LstJob
     * @returns Observable with Job array
     */
-   listMecError(date: String): Observable<File[]> {
+   listMecError(date: String, printFile: String): Observable<File[]> {
       const qDate = (date || '').replace(/-/g, '');
       return this.callMIAPI('EXT780MI', 'List', {
-         PRTF: "OIS199PF",
+         PRTF: printFile,
          GEN1: qDate,
       });
    }

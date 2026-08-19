@@ -14,10 +14,9 @@ export class gridOptions {
          filterable: true,
          disableRowDeactivation: true,
          rowHeight: 'small',
-         disableClientFilter: true,
-         filterWhenTyping: false,
          spacerColumn: true,
-         enableTooltips: true
+         enableTooltips: true,
+         filterWhenTyping: true
       };
 
       this.invoiceGeneratedGridOptions = {
@@ -26,10 +25,9 @@ export class gridOptions {
          filterable: true,
          disableRowDeactivation: true,
          rowHeight: 'small',
-         disableClientFilter: true,
-         filterWhenTyping: false,
          spacerColumn: true,
-         enableTooltips: true
+         enableTooltips: true,
+         filterWhenTyping: true
       };
 
       this.mecFailureGridOptions = {
@@ -38,10 +36,9 @@ export class gridOptions {
          filterable: true,
          disableRowDeactivation: true,
          rowHeight: 'small',
-         disableClientFilter: true,
-         filterWhenTyping: false,
          spacerColumn: true,
-         enableTooltips: true
+         enableTooltips: true,
+         filterWhenTyping: true
       };
    }
 }

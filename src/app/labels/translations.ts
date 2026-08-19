@@ -11,7 +11,7 @@ export const Translations = {
          STAT: { id: 'STAT', value: 'MNS270 Status' },
          PRTF: { id: 'PRTF', value: 'Print File' },
          FINA: { id: 'FINA', value: 'IDM File' },
-         EMSG: { id: 'EMSG', value: 'Output Status' },
+         EMSG: { id: 'EMSG', value: 'Error Message' },
          Invoice_Generated: {
             id: 'Invoice Generated',
             value: 'Invoice Generated',
@@ -30,7 +30,7 @@ export const Translations = {
          STAT: { id: 'STAT', value: 'Statut' },
          PRTF: { id: 'PRTF', value: 'Fichier d\'impression' },
          FINA: { id: 'FINA', value: 'Fichier IDM' },
-         EMSG: { id: 'EMSG', value: 'Statut de sortie' },
+         EMSG: { id: 'EMSG', value: 'Message d\'erreur' },
          Invoice_Generated: { id: 'Invoice Generated', value: 'Facture générée' },
       },
    },
