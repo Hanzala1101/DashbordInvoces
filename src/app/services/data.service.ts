@@ -8,13 +8,13 @@ import { GlobalStore } from '../store/global-store';
    providedIn: 'root',
 })
 export class DataService {
+   private url: string = '';
    constructor(private miService: MIService, private ionaAPIService: IonApiService, private applicationservice: ApplicationService) {
       this.miService = miService;
       this.ionaAPIService = ionaAPIService;
       this.applicationservice = applicationservice;
    }
    api = "https://mingle-ionapi.eu1.inforcloudsuite.com/HPZNVKVUB7E74B6F_DEV/GENAI/chatsvc";
-   api1 = "https://mingle-ionapi.inforcloudsuite.com/GBEA5YY64NVRWGT4_AX1/GENAI/chatsvc"
    /**
     * Call EXPORTMI API to fetch invoice data
     * @returns Observable with invoice, stats, and failure data
@@ -86,12 +86,18 @@ export class DataService {
    /**
     * Fetch IDM XML for a job number. Returns the raw XML string (or empty string on missing data).
     */
-   fetchIdmXml(invoNo: string): Observable<any> {
+   fetchIdmXml(invoNo: string, printFile: string): Observable<any> {
       if (!invoNo) {
          return from(['']);
       }
+      if(printFile == "OIS199PF") {
+         this.url = `/IDM/api/items/search/item?%24query=%2FM3_SalesInvoice%5B%40M3_InvoiceNumber%20%3D%20%22${invoNo}%22%5D%20`
+      }else if(printFile == "COS184PF") {
+         this.url = `/IDM/api/items/search/item?%24query=%2FM3_MCO_Invoice%5B%40M3_Invoice_Number%20%3D%20%22${invoNo}%22%5D%20`
+      }
       const request = {
-         url: `/IDM/api/items/search/item?%24query=%2FM3_SalesInvoice%5B%40M3_InvoiceNumber%20%3D%20%220${invoNo}%22%5D%20`,
+         // /M3_MCO_Invoice[@M3_Invoice_Number = "26000434"]
+         url: this.url,
          method: 'GET',
          // record: {
          //    query: `/M3_SalesInvoice[@M3_InvoiceNumber = "26000065"]`,

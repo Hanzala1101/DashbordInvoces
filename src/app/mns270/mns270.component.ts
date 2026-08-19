@@ -92,13 +92,14 @@ export class MNS270Component implements AfterViewInit {
           const rowRequests = enrichedItems.map((item: any) =>
             forkJoin({
               status: this.dataService.fetchFiles(item.UUID, item.PRTF),
-              idm: this.dataService.fetchIdmXml(item.IVNO),
+              idm: this.dataService.fetchIdmXml(item.IVNO, item.PRTF),
             }).pipe(
               map(({ status, idm }) => ({
                 ...item,
                 C4SSTA: status?.item?.CXSSTA || 'Unknown',
                 FINA:
-                  status?.item?.CXEMSG || idm?.body?.item?.filename || 'Not found',
+                  //status?.item?.CXEMSG || idm?.body?.item?.filename || 'Not found',
+                  status?.item?.CMEMSG?.trim() ? 'IDM Integration error : '+ status?.item?.CMEMSG?.trim() : (idm?.body?.item?.filename || 'Not found'),
                 LINK:
                   idm?.body?.item?.resrs?.res?.[0]?.url?.replace(/\\/g, '') ||
                   'file not found',

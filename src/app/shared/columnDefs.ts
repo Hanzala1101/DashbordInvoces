@@ -35,6 +35,7 @@ export class ColumnDefs {
       name: Soho.Locale.translate('PK01'),
       formatter: Soho.Formatters.Text,
       filterType: 'text',
+      contentTooltip: true,
     },
     {
       id: 'C4SSTA',
